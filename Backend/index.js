@@ -2,8 +2,16 @@ import express from 'express'
 
 const app = express();
 
-app.get('/', (req, res) => {
-  res.send('Welcome back');
+app.get("/",(req,res)=>{
+    res.json({msg:"Doy raite | Quiero Raite"})
+})
+
+app.get('/login', (req, res) => {
+  res.json({msg:'Sign In'});
+});
+
+app.get('/signup', (req, res) => {
+  res.json({msg:'SignUp'});
 });
 
 const port = 3000;
