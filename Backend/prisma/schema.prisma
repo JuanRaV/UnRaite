@@ -9,6 +9,78 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model Driver {
+  driverId            String     @id
+  name                String?
+  email               String     @unique
+  password            String?
+  phoneNumber         Int?       @unique
+  frontDriversLicence String?
+  backDriversLicence  String?
+  frontStudentCredential String?
+  backStudentCredential  String?
+  verified            Boolean?
+  strike              Int?
+  raite               Raite[]
+  //reportsAsReporter  Report[] @relation("DriverReporter")
+  //reportsAsAccused   Report[] @relation("DriverAccused")
+}
+
+model Passenger {
+  passengerId            String     @id
+  name                   String?
+  email                  String     @unique
+  password               String?    @unique
+  phoneNumber            Int?       @unique
+  frontStudentCredential String?
+  backStudentCredential  String?
+  verified               Boolean?
+  strike                 Int?
+  raite                  PassengerRaite[]
+  //reportsAsReporter  Report[] @relation("PassengerReporter")
+  //reportsAsAccused   Report[] @relation("PassengerAccused")
+}
+
+model Raite {
+  id             Int      @id @default(autoincrement())
+  startHour      DateTime?
+  date           DateTime?
+  start          String?
+  startingPoint  String?
+  destination    String?
+  arrivalPoint   String?
+  capacity       Int?
+  price          Int?
+  driver         Driver?  @relation(fields: [driverId], references: [driverId])
+  driverId       String?
+  strike         Int?
+  passengers     PassengerRaite[]
+  //reports        Report[]
+}
+
+model PassengerRaite {
+  passengerId  String
+  raiteId      Int
+  passenger    Passenger @relation(fields: [passengerId], references: [passengerId])
+  raite        Raite     @relation(fields: [raiteId], references: [id])
+
+  @@id([passengerId, raiteId])
+}
+
+
+// model Report {
+//   raiteId     Int
+//   reporterId  String
+//   acusedId    String
+//   raite       Raite   @relation(fields: [raiteId], references: [id])
+//   reporter    Driver? @relation("DriverReporter", fields: [reporterId], references: [driverId])
+//   acused      Driver? @relation("DriverAccused", fields: [acusedId], references: [driverId])
+//   passengerReporter Passenger? @relation("PassengerReporter", fields: [reporterId], references: [passengerId])
+//   passengerAccused Passenger? @relation("PassengerAccused", fields: [acusedId], references: [passengerId])
+
+//   @@id([raiteId, reporterId, acusedId])
+// }
