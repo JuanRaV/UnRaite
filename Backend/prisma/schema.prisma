@@ -15,16 +15,16 @@ datasource db {
 
 model Driver {
   driverId            String     @id
-  name                String?
+  name                String
   email               String     @unique
-  password            String?
-  phoneNumber         Int?       @unique
-  frontDriversLicence String?
-  backDriversLicence  String?
-  frontStudentCredential String?
-  backStudentCredential  String?
-  verified            Boolean?
-  strike              Int?
+  password            String
+  phoneNumber         Int       @unique
+  frontDriversLicence String
+  backDriversLicence  String
+  frontStudentCredential String
+  backStudentCredential  String
+  verified            Boolean
+  strike              Int
   raite               Raite[]
   //reportsAsReporter  Report[] @relation("DriverReporter")
   //reportsAsAccused   Report[] @relation("DriverAccused")
@@ -32,14 +32,14 @@ model Driver {
 
 model Passenger {
   passengerId            String     @id
-  name                   String?
+  name                   String
   email                  String     @unique
-  password               String?    @unique
-  phoneNumber            Int?       @unique
-  frontStudentCredential String?
-  backStudentCredential  String?
-  verified               Boolean?
-  strike                 Int?
+  password               String    
+  phoneNumber            Int       @unique
+  frontStudentCredential String
+  backStudentCredential  String
+  verified               Boolean
+  strike                 Int
   raite                  PassengerRaite[]
   //reportsAsReporter  Report[] @relation("PassengerReporter")
   //reportsAsAccused   Report[] @relation("PassengerAccused")
@@ -47,17 +47,17 @@ model Passenger {
 
 model Raite {
   id             Int      @id @default(autoincrement())
-  startHour      DateTime?
-  date           DateTime?
-  start          String?
+  startHour      DateTime
+  date           DateTime
+  start          String
   startingPoint  String?
-  destination    String?
+  destination    String
   arrivalPoint   String?
-  capacity       Int?
-  price          Int?
-  driver         Driver?  @relation(fields: [driverId], references: [driverId])
-  driverId       String?
-  strike         Int?
+  capacity       Int
+  price          Int
+  driver         Driver  @relation(fields: [driverId], references: [driverId])
+  driverId       String
+  strike         Int
   passengers     PassengerRaite[]
   //reports        Report[]
 }
