@@ -25,9 +25,9 @@ model Driver {
   backStudentCredential  String
   verified            Boolean
   strike              Int
-  raite               Raite[]
-  //reportsAsReporter  Report[] @relation("DriverReporter")
-  //reportsAsAccused   Report[] @relation("DriverAccused")
+  raites               Raite[]
+  driverReports       DriverReport[]
+  reports             PassengerReport[]
 }
 
 model Passenger {
@@ -41,8 +41,9 @@ model Passenger {
   verified               Boolean
   strike                 Int
   raite                  PassengerRaite[]
-  //reportsAsReporter  Report[] @relation("PassengerReporter")
-  //reportsAsAccused   Report[] @relation("PassengerAccused")
+  passangerReports       PassengerReport[]
+  reports                DriverReport[]
+
 }
 
 model Raite {
@@ -59,7 +60,8 @@ model Raite {
   driverId       String
   strike         Int
   passengers     PassengerRaite[]
-  //reports        Report[]
+  passagnerReports      PassengerReport[]
+  driverReports   DriverReport[]
 }
 
 model PassengerRaite {
@@ -71,16 +73,27 @@ model PassengerRaite {
   @@id([passengerId, raiteId])
 }
 
+model PassengerReport {
+  id                  Int      @id @default(autoincrement())
+  raiteId             Int
+  reporterPassengerId String
+  accusedDriverId     String
+  raite               Raite    @relation(fields: [raiteId], references: [id])
+  reporterPassenger   Passenger @relation(fields: [reporterPassengerId], references: [passengerId])
+  accusedDriver       Driver    @relation(fields: [accusedDriverId], references: [driverId])
 
-// model Report {
-//   raiteId     Int
-//   reporterId  String
-//   acusedId    String
-//   raite       Raite   @relation(fields: [raiteId], references: [id])
-//   reporter    Driver? @relation("DriverReporter", fields: [reporterId], references: [driverId])
-//   acused      Driver? @relation("DriverAccused", fields: [acusedId], references: [driverId])
-//   passengerReporter Passenger? @relation("PassengerReporter", fields: [reporterId], references: [passengerId])
-//   passengerAccused Passenger? @relation("PassengerAccused", fields: [acusedId], references: [passengerId])
+  @@index([raiteId])
+}
 
-//   @@id([raiteId, reporterId, acusedId])
-// }
+model DriverReport {
+  id                  Int      @id @default(autoincrement())
+  raiteId             Int
+  reporterDriverId    String
+  accusedPassengerId  String
+  raite               Raite    @relation(fields: [raiteId], references: [id])
+  reporterDriver      Driver   @relation(fields: [reporterDriverId], references: [driverId])
+  accusedPassenger    Passenger@relation(fields: [accusedPassengerId], references: [passengerId])
+
+  @@index([raiteId])
+}
+
