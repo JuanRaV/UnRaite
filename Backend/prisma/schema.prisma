@@ -24,7 +24,7 @@ model Driver {
   frontStudentCredential String
   backStudentCredential  String
   verified            Boolean
-  strike              Int
+  strike              Int?
   raites               Raite[]
   driverReports       DriverReport[]
   reports             PassengerReport[]
@@ -39,7 +39,7 @@ model Passenger {
   frontStudentCredential String
   backStudentCredential  String
   verified               Boolean
-  strike                 Int
+  strike                 Int?
   raite                  PassengerRaite[]
   passangerReports       PassengerReport[]
   reports                DriverReport[]
@@ -58,7 +58,6 @@ model Raite {
   price          Int
   driver         Driver  @relation(fields: [driverId], references: [driverId])
   driverId       String
-  strike         Int
   passengers     PassengerRaite[]
   passagnerReports      PassengerReport[]
   driverReports   DriverReport[]

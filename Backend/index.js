@@ -1,18 +1,12 @@
 import express from 'express'
+import userRoutes from './routes/userRoutes.js'
 
 const app = express();
 
-app.get("/",(req,res)=>{
-    res.json({msg:"Doy raite | Quiero Raite"})
-})
+app.use(express.json())
 
-app.get('/login', (req, res) => {
-  res.json({msg:'Sign In'});
-});
-
-app.get('/signup', (req, res) => {
-  res.json({msg:'SignUp'});
-});
+//Routes
+app.use('/api/users', userRoutes)
 
 const port = 3000;
 
