@@ -123,29 +123,48 @@ const login = async (req,res) =>{
     const user = passenger || driver
     console.log(user)
     
-    // const {name, phoneNumber} = user
 
-    // if(!user){
-    //     const error = new Error("User not found")
-    //     return res.status(404).json({msg:error.message})
-    // }
+    if(!user){
+        const error = new Error("User not found")
+        return res.status(404).json({msg:error.message})
+    }
 
-    // //Check if the account iths verified
-    // if(!user.verified){
-    //     const error = new Error("User not verified")
-    //     return res.status(404).json({msg:error.message})
-    // }
+    //Check if the account iths verified
+    if(!passenger.verified && !driver?.verified){
+        const error = new Error("User not verified")
+        return res.status(404).json({msg:error.message})
+    }
 
-    // //Check password
-    // if(await checkPassword(user,req.password)){
-    //     res.json({
-    //         ${type}Id:
-    //         name,
-    //         email,
-    //         password:hashedPassword, 
-    //         phoneNumber,
-    //     })
-    // }
+    //Check password
+    if(driver){
+        if(await checkPassword(driver,req.body.password)){
+            // return res.json({msg:"Driver LOGIN"})
+            res.json({
+                driverId:driver.driverId,
+                name:driver.name,
+                email: driver.email,
+                phoneNumber: driver.phoneNumber,
+            })
+        }else{
+            const error = new Error("Incorrect Password")
+            return res.status(404).json({msg:error.message})
+        } 
+    }
+    else if(passenger ){
+        if(await checkPassword(passenger,req.body.password)){
+            // return res.json({msg:"Passenger LOGIN"})
+            res.json({
+                passengerId:passenger.passengerId,
+                name:passenger.name,
+                email: passenger.email,
+                phoneNumber: passenger.phoneNumber,
+            })
+        }else{
+            const error = new Error("Incorrect Password")
+            return res.status(404).json({msg:error.message})
+        }
+    }
+
 }
 export{
     registerUser,
