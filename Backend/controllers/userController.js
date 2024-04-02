@@ -1,6 +1,7 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import bcrypt from 'bcrypt'
 import generateID from "../helpers/generateID.js";
+import generateJWT from "../helpers/generateJWT.js";
 
 const prisma = new PrismaClient()
 
@@ -31,6 +32,7 @@ const passengersSignUp = async (req,res)=>{
                 frontStudentCredential,
                 backStudentCredential,
                 verified: false,
+                token: 'p' + generateID()
             }
         })
         console.log(passenger)
@@ -51,6 +53,8 @@ const dirversSignUp = async (req,res)=>{
 
     const existingDriverEmail = await prisma.driver.findUnique({where:{email}})
     const existingDriverNumber = await prisma.driver.findUnique({where:{phoneNumber}})
+    
+    const token = generateID()
 
     if(existingPassengerEmail||existingDriverEmail){
         const error = new Error("Account already registered")
@@ -72,6 +76,7 @@ const dirversSignUp = async (req,res)=>{
                 frontStudentCredential,
                 backStudentCredential,
                 verified: false,
+                token: 'p' + token
             }
         })
         console.log(passenger)
@@ -87,6 +92,7 @@ const dirversSignUp = async (req,res)=>{
                 frontStudentCredential,
                 backStudentCredential,
                 verified: false,
+                token: 'd' + token
             }
         })
         console.log(driver)
@@ -114,7 +120,7 @@ const checkPassword = async function(user, password){
 }
 
 const login = async (req,res) =>{
-    const {email, password}= req.body
+    const {email}= req.body
 
     //Check if that user exists:
     const passenger = await prisma.passenger.findFirst({where:{email}})
@@ -143,7 +149,7 @@ const login = async (req,res) =>{
                 driverId:driver.driverId,
                 name:driver.name,
                 email: driver.email,
-                phoneNumber: driver.phoneNumber,
+                phoneNumber: driver.phoneNumber
             })
         }else{
             const error = new Error("Incorrect Password")
@@ -157,7 +163,7 @@ const login = async (req,res) =>{
                 passengerId:passenger.passengerId,
                 name:passenger.name,
                 email: passenger.email,
-                phoneNumber: passenger.phoneNumber,
+                phoneNumber: passenger.phoneNumber
             })
         }else{
             const error = new Error("Incorrect Password")
@@ -165,7 +171,43 @@ const login = async (req,res) =>{
         }
     }
 }
+
+const forgotPassword = async (req,res)=>{
+    const {email} = req.body
+    //Check if that user exists:
+    const passenger = await prisma.passenger.findFirst({where:{email}})
+    const driver = await prisma.driver.findFirst({where:{email}})
+    
+    const user = passenger || driver
+    console.log(user)
+    
+    const id = generateID()
+
+    if(!user){
+        const error = new Error("User not found")
+        return res.status(404).json({msg:error.message})
+    }
+    try{
+        if(driver){
+            driver.token = 'd' + id
+            await prisma.driver.update({
+                where: { email },
+                data: { token: driver.token }
+            })
+
+            //Send email
+
+            res.json({msg:"We've sent an email with further instructions"})
+        }
+        else if(passenger ){
+
+        }
+    }catch(error){
+        console.log(error)
+    }
+}
 export{
     registerUser,
-    login
+    login,
+    forgotPassword
 }

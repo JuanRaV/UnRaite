@@ -1,0 +1,9 @@
+-- AlterTable
+ALTER TABLE `driver` ADD COLUMN `token` VARCHAR(191) NULL,
+    MODIFY `verified` BOOLEAN NOT NULL DEFAULT false,
+    MODIFY `strike` INTEGER NULL DEFAULT 0;
+
+-- AlterTable
+ALTER TABLE `passenger` ADD COLUMN `token` VARCHAR(191) NULL,
+    MODIFY `verified` BOOLEAN NOT NULL DEFAULT false,
+    MODIFY `strike` INTEGER NULL DEFAULT 0;

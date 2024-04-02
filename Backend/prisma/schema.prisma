@@ -23,9 +23,10 @@ model Driver {
   backDriversLicence  String
   frontStudentCredential String
   backStudentCredential  String
-  verified            Boolean
-  strike              Int?
-  raites               Raite[]
+  verified            Boolean @default(false)
+  token               String?
+  strike              Int?  @default(0) 
+  raites              Raite[]
   driverReports       DriverReport[]
   reports             PassengerReport[]
 }
@@ -38,8 +39,9 @@ model Passenger {
   phoneNumber            Int       @unique
   frontStudentCredential String
   backStudentCredential  String
-  verified               Boolean
-  strike                 Int?
+  verified               Boolean @default(false)
+  token                  String?
+  strike                 Int? @default(0) 
   raite                  PassengerRaite[]
   passangerReports       PassengerReport[]
   reports                DriverReport[]
