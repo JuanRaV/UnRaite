@@ -34,7 +34,7 @@ const passengersSignUp = async (req,res)=>{
             }
         })
         console.log(passenger)
-        res.json({msg:"User created successfully, check your email to confirm your account"})
+        res.json({msg:"User created successfully, wait until the admin verified you account"})
     }catch(error){
         console.log(error)
         res.json({msg:"Error"})
@@ -90,7 +90,7 @@ const dirversSignUp = async (req,res)=>{
             }
         })
         console.log(driver)
-        res.json({msg:"User created successfully, check your email to confirm your account"})
+        res.json({msg:"User created successfully, wait until the admin verified you account"})
     }catch(error){
         console.log(error)
         res.json({msg:"Error"})
@@ -164,7 +164,6 @@ const login = async (req,res) =>{
             return res.status(404).json({msg:error.message})
         }
     }
-
 }
 export{
     registerUser,
