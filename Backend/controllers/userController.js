@@ -194,20 +194,44 @@ const forgotPassword = async (req,res)=>{
                 where: { email },
                 data: { token: driver.token }
             })
-
+            //TODO SEND EMAIL
             //Send email
 
             res.json({msg:"We've sent an email with further instructions"})
         }
-        else if(passenger ){
+        else if(passenger){
+            passenger.token = 'p' + id
+            await prisma.passenger.update({
+                where: { email },
+                data: { token: passenger.token }
+            })
+            //TODO SEND EMAIL
+            //Send email
 
+            res.json({msg:"We've sent an email with further instructions"})
         }
     }catch(error){
         console.log(error)
     }
 }
+
+const checkToken = async (req,res)=>{
+    const {token} = req.params
+    const passenger = await prisma.passenger.findFirst({where:{token}})
+    const driver = await prisma.driver.findFirst({where:{token}})
+
+    const user = passenger || driver
+    if(user)
+        res.json({msg:"Valid token and user exists"})
+    else{
+        const error = new Error("User not found")
+        return res.status(404).json({msg:error.message})
+    }
+}
+
 export{
     registerUser,
     login,
-    forgotPassword
+    forgotPassword,
+    checkToken
 }
