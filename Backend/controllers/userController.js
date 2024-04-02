@@ -32,7 +32,7 @@ const passengersSignUp = async (req,res)=>{
                 frontStudentCredential,
                 backStudentCredential,
                 verified: false,
-                token: 'p' + generateID()
+                // token: 'p' + generateID()
             }
         })
         console.log(passenger)
@@ -76,7 +76,7 @@ const dirversSignUp = async (req,res)=>{
                 frontStudentCredential,
                 backStudentCredential,
                 verified: false,
-                token: 'p' + token
+                // token: 'p' + token
             }
         })
         console.log(passenger)
@@ -92,7 +92,7 @@ const dirversSignUp = async (req,res)=>{
                 frontStudentCredential,
                 backStudentCredential,
                 verified: false,
-                token: 'd' + token
+                // token: 'd' + token
             }
         })
         console.log(driver)
