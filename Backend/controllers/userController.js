@@ -1,4 +1,5 @@
 import { Prisma, PrismaClient } from "@prisma/client";
+import bcrypt from 'bcrypt'
 import generateID from "../helpers/generateID.js";
 
 const prisma = new PrismaClient()
@@ -19,12 +20,13 @@ const passengersSignUp = async (req,res)=>{
         return res.status(400).json({msg:error.message})
     }
     try{
+        const hashedPassword = await bcrypt.hash(password, 10);
         const passenger = await prisma.passenger.create({
             data:{
                 passengerId:'p' + generateID(),
                 name,
                 email,
-                password, 
+                password:hashedPassword, 
                 phoneNumber,
                 frontStudentCredential,
                 backStudentCredential,
@@ -58,12 +60,14 @@ const dirversSignUp = async (req,res)=>{
         return res.status(400).json({msg:error.message})
     }
     try{
+        const hashedPassword = await bcrypt.hash(password, 10);
+        
         const passenger = await prisma.passenger.create({
             data:{
                 passengerId:'p' + generateID(),
                 name,
                 email,
-                password, 
+                password:hashedPassword, 
                 phoneNumber,
                 frontStudentCredential,
                 backStudentCredential,
@@ -76,7 +80,7 @@ const dirversSignUp = async (req,res)=>{
                 driverId:'d' + generateID(),
                 name,
                 email,
-                password, 
+                password:hashedPassword, 
                 phoneNumber,
                 frontDriversLicence,
                 backDriversLicence,
@@ -92,7 +96,7 @@ const dirversSignUp = async (req,res)=>{
         res.json({msg:"Error"})
     }
 } 
- 
+
 const registerUser = async(req,res) =>{
     if(req.originalUrl == '/api/users/signup/passenger')
         passengersSignUp(req,res)
@@ -105,6 +109,45 @@ const registerUser = async(req,res) =>{
         res.status(400).json({ msg: 'Invalid endpoint' });
 }
 
+const checkPassword = async function(user, password){
+    return await bcrypt.compare(password, user.password)
+}
+
+const login = async (req,res) =>{
+    const {email, password}= req.body
+
+    //Check if that user exists:
+    const passenger = await prisma.passenger.findFirst({where:{email}})
+    const driver = await prisma.driver.findFirst({where:{email}})
+    
+    const user = passenger || driver
+    console.log(user)
+    
+    // const {name, phoneNumber} = user
+
+    // if(!user){
+    //     const error = new Error("User not found")
+    //     return res.status(404).json({msg:error.message})
+    // }
+
+    // //Check if the account iths verified
+    // if(!user.verified){
+    //     const error = new Error("User not verified")
+    //     return res.status(404).json({msg:error.message})
+    // }
+
+    // //Check password
+    // if(await checkPassword(user,req.password)){
+    //     res.json({
+    //         ${type}Id:
+    //         name,
+    //         email,
+    //         password:hashedPassword, 
+    //         phoneNumber,
+    //     })
+    // }
+}
 export{
-    registerUser
+    registerUser,
+    login
 }
