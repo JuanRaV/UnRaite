@@ -194,6 +194,10 @@ const forgotPassword = async (req,res)=>{
                 where: { email },
                 data: { token: driver.token }
             })
+            await prisma.passenger.update({
+                where: { email },
+                data: { token: driver.token }
+            })
             //TODO SEND EMAIL
             //Send email
 
@@ -230,9 +234,53 @@ const checkToken = async (req,res)=>{
     console.log("Hola ADIOS")
 }
 
+const newPassword = async(req,res)=>{
+    const {token} = req.params
+    const {password} = req.body
+
+    const passenger = await prisma.passenger.findFirst({where:{token}})
+    const driver = await prisma.driver.findFirst({where:{token}})
+    // const passenger = await prisma.passenger.findFirst({ where: { OR: [{ token }, { email: token }] } });
+    // const driver = await prisma.driver.findFirst({ where: { OR: [{ token }, { email: token }] } });
+    const hashedPassword = await bcrypt.hash(password, 10);
+    if(driver){
+        try {
+            await prisma.driver.update({
+                where: { email: driver.email, token },
+                data: { password:hashedPassword ,token: "" }
+            })
+            await prisma.passenger.update({
+                where: { email: driver.email, token },
+                data: { password:hashedPassword,token: "" }
+            })
+            res.json({msg:"Password changed correctly"})
+        } catch (error) {
+            console.log(error)
+        }
+    }else if(passenger){
+        // passenger.password = password
+        // passenger.token = ""
+        try {
+            await prisma.passenger.update({
+                where: { email: passenger.email, token },
+                data: { password:hashedPassword,token: "" }
+            })
+            res.json({msg:"Password changed correctly"})
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    else{
+        const error = new Error("Invalid Token")
+        return res.status(404).json({msg:error.message}) 
+    }
+
+}
+
 export{
     registerUser,
     login,
     forgotPassword,
-    checkToken
+    checkToken,
+    newPassword
 }
