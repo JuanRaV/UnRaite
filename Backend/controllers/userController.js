@@ -227,6 +227,7 @@ const checkToken = async (req,res)=>{
         const error = new Error("User not found")
         return res.status(404).json({msg:error.message})
     }
+    console.log("Hola")
 }
 
 export{
