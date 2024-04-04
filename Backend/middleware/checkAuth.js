@@ -50,6 +50,46 @@ const checkDriversAuth = async(req,res,next) =>{
     next()
 }
 
+const checkPassengersAuth = async(req,res,next) =>{
+    let token;
+    if(req.headers.authorization && req.headers.authorization.startsWith("Bearer")){
+        try {
+            token = req.headers.authorization.split(" ")[1]
+            const decoded = jwt.verify(token,process.env.JWT_SECRET)
+
+            try {
+                const passenger = await prisma.passenger.findUnique({
+                    where: { passengerId:decoded.id },
+                    select: {
+                      passengerId:true,
+                      name: true,
+                      email: true,
+                      phoneNumber: true,
+                      raite: true
+                    },
+                  });
+                console.log(passenger)
+                req.passenger = passenger
+                console.log("Sesion guardada con exito")
+            } catch (error) {
+                console.log(error)
+            }
+
+            return next()
+        } catch (error) {
+            return res.status(404).json({msg:"There was an error"})
+        }
+    }
+
+    if(!token){
+        const error = new Error("Invalid Token")
+        return res.status(401).json({msg :error.message})
+    }
+
+    next()
+}
+
 export {
-    checkDriversAuth
+    checkDriversAuth,
+    checkPassengersAuth
 }
