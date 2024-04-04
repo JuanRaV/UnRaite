@@ -149,7 +149,8 @@ const login = async (req,res) =>{
                 driverId:driver.driverId,
                 name:driver.name,
                 email: driver.email,
-                phoneNumber: driver.phoneNumber
+                phoneNumber: driver.phoneNumber,
+                token: generateJWT(driver.driverId)
             })
         }else{
             const error = new Error("Incorrect Password")
@@ -163,7 +164,8 @@ const login = async (req,res) =>{
                 passengerId:passenger.passengerId,
                 name:passenger.name,
                 email: passenger.email,
-                phoneNumber: passenger.phoneNumber
+                phoneNumber: passenger.phoneNumber,
+                token: generateJWT(passenger.passengerId)
             })
         }else{
             const error = new Error("Incorrect Password")
@@ -277,10 +279,22 @@ const newPassword = async(req,res)=>{
 
 }
 
+const driverProfile = async(req,res)=>{
+    const {driver} = req
+    res.json(driver)
+}
+
+const passengerProfile = async(req,res)=>{
+    const {passenger} = req
+    res.json(passenger)
+}
+
 export{
     registerUser,
     login,
     forgotPassword,
     checkToken,
-    newPassword
+    newPassword,
+    driverProfile,
+    passengerProfile
 }
