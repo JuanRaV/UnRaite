@@ -11,6 +11,7 @@ router.post("/forgot-password", forgotPassword)
 router.get("/forgot-password/:token", checkToken)
 router.post("/forgot-password/:token", newPassword)
 
+//Private Endpoint
 router.get("/driver-profile", checkDriversAuth, driverProfile)
 router.get("/passenger-profile", checkPassengersAuth, passengerProfile)
 

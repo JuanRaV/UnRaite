@@ -30,6 +30,10 @@ const checkDriversAuth = async(req,res,next) =>{
                       raites: true
                     },
                   });
+                  if(!driver)
+                    return res.status(404).json({msg:"Driver not found"})
+                  
+
                 req.driver = driver
                 console.log("Sesion guardada con exito")
             } catch (error) {
@@ -68,6 +72,8 @@ const checkPassengersAuth = async(req,res,next) =>{
                       raite: true
                     },
                   });
+                if(!passenger)
+                  return res.status(404).json({msg:"Driver not found"})
                 console.log(passenger)
                 req.passenger = passenger
                 console.log("Sesion guardada con exito")
