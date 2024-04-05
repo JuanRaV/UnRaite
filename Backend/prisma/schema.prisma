@@ -50,8 +50,8 @@ model Passenger {
 
 model Raite {
   id             Int      @id @default(autoincrement())
-  startHour      DateTime
-  date           DateTime
+  startHour      String
+  date           String
   start          String
   startingPoint  String?
   destination    String

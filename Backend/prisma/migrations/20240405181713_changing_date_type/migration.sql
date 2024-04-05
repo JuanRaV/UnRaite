@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE `raite` MODIFY `startHour` VARCHAR(191) NOT NULL,
+    MODIFY `date` VARCHAR(191) NOT NULL;
