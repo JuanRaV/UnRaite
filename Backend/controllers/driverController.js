@@ -54,7 +54,17 @@ const getRaite = async(req,res) =>{
     const{id} = req.params
     const num = parseInt(id)
     try {
-        const raite = await prisma.raite.findFirst({where:{id:num}})
+        const raite = await prisma.raite.findFirst({
+            where: { id: num },
+            include: { 
+              passengers: { 
+                include: { 
+                  passenger: true 
+                } 
+              } 
+            }
+          });
+          
         if(!raite)
             return res.status(500).json({ msg: "Raite not found" });
         else if(raite.driverId != req.driver.driverId)
