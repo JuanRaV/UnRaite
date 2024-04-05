@@ -47,10 +47,26 @@ const getRaites = async (req,res)=>{
         res.status(500).json({ msg: "Start creating one Raite!" });
 
     res.json(raites)
+}
 
+//Gets data from specific raite
+const getRaite = async(req,res) =>{
+    const{id} = req.params
+    const num = parseInt(id)
+    try {
+        const raite = await prisma.raite.findFirst({where:{id:num}})
+        if(!raite)
+            return res.status(500).json({ msg: "Raite not found" });
+        else if(raite.driverId != req.driver.driverId)
+            return res.status(500).json({ msg: "This is not your Raite" });
+        return res.json(raite)
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 export{
     createRaite,
-    getRaites
+    getRaites,
+    getRaite
 }
