@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import set from 'date-fns/set'
 
 const prisma = new PrismaClient()
 
@@ -10,14 +11,15 @@ const createRaite = async (req,res) =>{
     // const sh = new Date(startHour)
     // console.log(sh)
     // return
-
+    console.log(driverId)
+    console.log("create raite")
 
     try {
-        const formattedStartHour = new Date(startHour).toISOString();;
-        const formattedDate = new Date(date).toISOString();;
+        const formattedStartHour = new Date(startHour);
+        const formattedDate = new Date(date).toISOString();
 
         const raite = await prisma.raite.create({
-            startHour: formattedStartHour,
+            startHour: set(new Date(), { hours: 1, minutes: 10 }),
             date:formattedDate,
             start,
             startingPoint,

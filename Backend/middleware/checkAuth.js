@@ -9,12 +9,16 @@ const prisma = new PrismaClient()
 const checkDriversAuth = async(req,res,next) =>{
     // console.log(req.headers.authorization)
     // return
+    console.log("check drivers")
+    
     let token;
     if(req.headers.authorization && req.headers.authorization.startsWith("Bearer")){
         try {
             token = req.headers.authorization.split(" ")[1]
             const decoded = jwt.verify(token,process.env.JWT_SECRET)
-            // console.log("token" + token)
+
+            
+             console.log("token" + token)
             // console.log(decoded.id)
             // return
             // Busca al conductor por su id y excluye los campos que no deseas devolver
@@ -47,7 +51,7 @@ const checkDriversAuth = async(req,res,next) =>{
     }
 
     if(!token){
-        const error = new Error("Invalid Token")
+        const error = new Error("Invalid Token ")
         return res.status(401).json({msg :error.message})
     }
 
@@ -88,6 +92,7 @@ const checkPassengersAuth = async(req,res,next) =>{
     }
 
     if(!token){
+        console.log(token,"!")
         const error = new Error("Invalid Token")
         return res.status(401).json({msg :error.message})
     }
