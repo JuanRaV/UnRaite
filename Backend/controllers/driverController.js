@@ -76,11 +76,68 @@ const getRaite = async(req,res) =>{
     }
 }
 
-const editRaite = async(req,res) =>{
-    const {id} = req.params
-    const num = parseInt(id)
-    const raite = await prisma.raite.findFirst({where:{id:num}})
-}
+const editRaite = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const num = parseInt(id);
+
+      const raite = await prisma.raite.findFirst({
+        where: { id: num }
+      });
+  
+      if (!raite) {
+        return res.status(404).json({ error: 'Raite not found' });
+      }
+ 
+      const { startHour, date, start, startingPoint, destination, arrivalPoint, capacity, price, completed } = req.body;
+  
+      const updatedRaite = await prisma.raite.update({
+        where: { id: num },
+        data: {
+          startHour,
+          date,
+          start,
+          startingPoint,
+          destination,
+          arrivalPoint,
+          capacity,
+          price,
+          completed
+        }
+      });
+
+      res.json(updatedRaite);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  };
+
+  
+  const deleteRaite = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const num = parseInt(id);
+
+      const raite = await prisma.raite.findFirst({
+        where: { id: num }
+      });
+
+      if (!raite) {
+        return res.status(404).json({ error: 'Raite not found' });
+      }
+
+      await prisma.raite.delete({
+        where: { id: num }
+      });
+
+      res.json({ message: 'Raite deleted successfully' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  };
+  
 
 export{
     createRaite,
