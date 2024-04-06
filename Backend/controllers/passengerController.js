@@ -2,6 +2,19 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient()
 
+const getAllRaites = async (req, res) => {
+    const allRaites = await prisma.raite.findMany({
+        where: {
+            capacity: {
+                not: 0
+            }
+        }
+    });
+    if (!allRaites)
+        return res.status(404).json({ error: "There are no Raites available" });
+    res.json({ allRaites })
+}
+
 const acceptRaite = async (req, res) => {
     try {
         const { id } = req.params;
@@ -28,10 +41,10 @@ const acceptRaite = async (req, res) => {
         await prisma.raite.update({
             where: { id: num },
             data: {
-                capacity: raite.capacity-1
+                capacity: raite.capacity - 1
             }
         });
-        
+
 
         res.json({ message: 'Raite accepted successfully' });
     } catch (error) {
@@ -45,6 +58,7 @@ const cancelRaite = async (req, res) => {
 }
 
 export {
+    getAllRaites,
     acceptRaite,
     cancelRaite
 }
