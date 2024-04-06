@@ -19,7 +19,6 @@ const acceptRaite = async (req, res) => {
         else if (raite.capacity == 0)
             return res.status(404).json({ error: 'This raite is full' });
 
-        // Crea el registro en PassengerRaite
         await prisma.passengerRaite.create({
             data: {
                 passengerId,
