@@ -15,6 +15,32 @@ const getAllRaites = async (req, res) => {
     res.json({ allRaites })
 }
 
+const getOneRaite = async (req, res) => {
+    const { id } = req.params
+    const num = parseInt(id)
+    try {
+        const raite = await prisma.raite.findFirst({
+            where: { id: num },
+            include: {
+                driver: true,
+                passengers: {
+                    include: {
+                        passenger: true
+                    }
+                }
+
+            }
+        });
+
+        if (!raite)
+            return res.status(500).json({ msg: "Raite not found" });
+
+        return res.json(raite)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 const acceptRaite = async (req, res) => {
     try {
         const { id } = req.params;
@@ -59,6 +85,7 @@ const cancelRaite = async (req, res) => {
 
 export {
     getAllRaites,
+    getOneRaite,
     acceptRaite,
     cancelRaite
 }
