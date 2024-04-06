@@ -6,7 +6,7 @@ const router = express.Router()
 
 router.post("/create-raite", checkDriversAuth, createRaite)
 router.get("/get-raites", checkDriversAuth, getRaites)
-router.get("/get-raites/:id",checkDriversAuth, getRaite)
+router.get("/get-raite/:id",checkDriversAuth, getRaite)
 router.put("/edit-raite/:id",checkDriversAuth,editRaite)
 router.delete("/delete-raite/:id",checkDriversAuth, deleteRaite)
 router.put("/complete-raite/:id",checkDriversAuth,completeRaite)

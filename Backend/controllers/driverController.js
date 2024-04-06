@@ -69,7 +69,7 @@ const getRaite = async (req, res) => {
       return res.status(500).json({ msg: "Raite not found" });
     else if (raite.driverId != req.driver.driverId)
       return res.status(500).json({ msg: "This is not your Raite" });
-    return res.json(raite)
+    return res.json(raite) 
   } catch (error) {
     console.log(error)
   }
