@@ -80,6 +80,44 @@ const acceptRaite = async (req, res) => {
 };
 
 const cancelRaite = async (req, res) => {
+    const { id } = req.params
+    const num = parseInt(id);
+    const passengerId = req.passenger.passengerId
+
+
+    try {
+
+        const raite = await prisma.passengerRaite.findFirst({
+            where: {
+                passengerId,
+                raiteId: num,
+            }
+        });
+
+        if (!raite)
+            return res.status(404).json({ error: 'Raite not found' });
+
+        await prisma.passengerRaite.delete({
+            where: {
+                passengerId_raiteId: {
+                    passengerId,
+                    raiteId: num,
+                }
+            }
+        });
+
+        await prisma.raite.update({
+            where: { id: num },
+            data: {
+                capacity: {
+                    increment: 1
+                }
+            }
+        });
+        res.json({ message: 'Raite canceled successfully' });
+    } catch (error) {
+        console.log(error)
+    }
 
 }
 

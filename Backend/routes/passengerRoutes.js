@@ -7,6 +7,6 @@ const router = express.Router()
 router.get('/',checkPassengersAuth, getAllRaites)
 router.get('/:id',checkPassengersAuth, getOneRaite)
 router.put("/accept-raite/:id", checkPassengersAuth, acceptRaite)
-router.delete("/cancel-raite", checkPassengersAuth, cancelRaite)
+router.delete("/cancel-raite/:id", checkPassengersAuth, cancelRaite)
 
 export default router
