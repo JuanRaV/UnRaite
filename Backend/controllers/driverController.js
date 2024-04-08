@@ -9,7 +9,7 @@ const createRaite = async (req, res) => {
   const array = [startHour, date, start, destination, capacity, price].every(field => field && field !== '');
 
   if (!array)
-    return res.status(400).json({ error: 'All fields are required' });
+    return res.status(400).json({ msg: 'All fields are required' });
 
   try {
 
@@ -85,7 +85,7 @@ const editRaite = async (req, res) => {
     });
 
     if (!raite)
-      return res.status(404).json({ error: 'Raite not found' });
+      return res.status(404).json({ msg: 'Raite not found' });
     else if (raite.driverId != req.driver.driverId)
       return res.status(500).json({ msg: "This is not your Raite" });
 
@@ -110,7 +110,7 @@ const editRaite = async (req, res) => {
     res.json(updatedRaite);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ msg: 'Internal server error' });
   }
 };
 
@@ -130,7 +130,7 @@ const deleteRaite = async (req, res) => {
     });
 
     if (!raite)
-      return res.status(404).json({ error: 'Raite not found' });
+      return res.status(404).json({ msg: 'Raite not found' });
     else if (raite.driverId != req.driver.driverId)
       return res.status(500).json({ msg: "This is not your Raite" });
 
@@ -151,10 +151,10 @@ const deleteRaite = async (req, res) => {
       where: { id: num }
     });
     console.log(deletedRaite)
-    return res.json({ message: 'Raite deleted successfully' });
+    return res.json({ msg: 'Raite deleted successfully' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ msg: 'Internal server error' });
   }
 };
 
@@ -167,7 +167,7 @@ const completeRaite = async (req, res) => {
   });
 
   if (!raite)
-    return res.status(404).json({ error: 'Raite not found' });
+    return res.status(404).json({ msg: 'Raite not found' });
   else if (raite.driverId != req.driver.driverId)
     return res.status(500).json({ msg: "This is not your Raite" });
   else if(raite.completed)
