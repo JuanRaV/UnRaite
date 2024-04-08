@@ -1,13 +1,16 @@
 import express from 'express'
+import adminRoutes from './routes/adminRoutes.js'
 import userRoutes from './routes/userRoutes.js'
 import driverRoutes from './routes/driverRoutes.js'
 import passengerRoutes from './routes/passengerRoutes.js'
+
 
 const app = express();
 
 app.use(express.json())
 
 //Routes
+app.use('/',adminRoutes)
 app.use('/api/users', userRoutes)
 app.use("/driver", driverRoutes)
 app.use('/passenger', passengerRoutes)
