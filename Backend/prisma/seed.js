@@ -138,6 +138,20 @@ async function main() {
       verified: true
     },
   });
+  const passenger3 = await prisma.passenger.upsert({
+    where: { email: 'edu@example.com' },
+    update: {},
+    create: {
+      passengerId: 'p' + generateID(),
+      name: 'Eduardo',
+      email: 'edu@example.com',
+      password: hashedPassword,
+      phoneNumber: 77,
+      frontStudentCredential: '/edu_student_front.png',
+      backStudentCredential: '/edu_student_back.png',
+      verified: true
+    },
+  });
 
   const raite1 = await prisma.raite.upsert({
     where: { id: 1 },
@@ -250,6 +264,19 @@ async function main() {
     create: {
       passengerId: passenger1.passengerId,
       raiteId: raite3.id
+    }
+  })
+  const passraite4 = await prisma.passengerRaite.upsert({
+    where: {
+      passengerId_raiteId: {
+        passengerId: passenger3.passengerId,
+        raiteId: raite2.id
+      }
+    },
+    update: {},
+    create: {
+      passengerId: passenger3.passengerId,
+      raiteId: raite2.id
     }
   })
   console.log({ driver1, driver2, driver3, passenger1, passenger2, driverpass1 });

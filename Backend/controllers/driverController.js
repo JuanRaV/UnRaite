@@ -213,7 +213,7 @@ const strike = async (req, res) => {
       }
     });
     //Increment number of passenger strikes
-    await prisma.passenger.update({
+    const passenger = await prisma.passenger.update({
       where:{passengerId},
       data: {
         strike:{
@@ -221,7 +221,7 @@ const strike = async (req, res) => {
         }
       } 
     })
-    return res.json({ msg: "Report created successfully" })
+    return res.json({ msg: `Report to ${passenger.name} created successfully` })
   } catch (error) {
     console.log(error)
     res.status(500).json({ msg: 'Internal server error' });

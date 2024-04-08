@@ -12,4 +12,4 @@ router.delete("/delete-raite/:id",checkDriversAuth, deleteRaite)
 router.put("/complete-raite/:id",checkDriversAuth,completeRaite)
 router.post("/strike-passenger/:passengerId/:raiteId", checkDriversAuth, strike )
 
-export default router
+export default router 
