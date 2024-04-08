@@ -69,7 +69,7 @@ const getRaite = async (req, res) => {
       return res.status(500).json({ msg: "Raite not found" });
     else if (raite.driverId != req.driver.driverId)
       return res.status(500).json({ msg: "This is not your Raite" });
-    return res.json(raite) 
+    return res.json(raite)
   } catch (error) {
     console.log(error)
   }
@@ -170,7 +170,7 @@ const completeRaite = async (req, res) => {
     return res.status(404).json({ msg: 'Raite not found' });
   else if (raite.driverId != req.driver.driverId)
     return res.status(500).json({ msg: "This is not your Raite" });
-  else if(raite.completed)
+  else if (raite.completed)
     return res.status(500).json({ msg: "Raite already completed" });
   try {
     await prisma.raite.update({
@@ -186,11 +186,57 @@ const completeRaite = async (req, res) => {
 
 }
 
+const strike = async (req, res) => {
+  const { passengerId, raiteId } = req.params
+  const num = parseInt(raiteId);
+
+  const passengerRaite = await prisma.passengerRaite.findFirst({ where: { passengerId, raiteId: num } })
+
+  const raite = await prisma.raite.findFirst({where:{id:num}})
+
+  const report = await prisma.driverReport.findFirst({where:{raiteId:num,accusedPassengerId:passengerId}})
+
+  // console.log(report)
+  if(report)
+    return res.status(404).json({ msg: "Report Already Created" })
+
+  if ((!passengerRaite) || (raite.driverId!= req.driver.driverId))
+    return res.status(404).json({ msg: "You Can Not Do This Action" })
+
+  // Crear el reporte del conductor
+  try {
+    await prisma.driverReport.create({
+      data: {
+        raiteId: num,
+        reporterDriverId: req.driver.driverId,
+        accusedPassengerId: passengerId
+      }
+    });
+    //Increment number of passenger strikes
+    await prisma.passenger.update({
+      where:{passengerId},
+      data: {
+        strike:{
+          increment: 1
+        }
+      } 
+    })
+    return res.json({ msg: "Report created successfully" })
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ msg: 'Internal server error' });
+  }
+
+
+
+}
+
 export {
   createRaite,
   getRaites,
   getRaite,
   editRaite,
   deleteRaite,
-  completeRaite
+  completeRaite,
+  strike
 }
