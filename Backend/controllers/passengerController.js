@@ -50,11 +50,11 @@ const acceptRaite = async (req, res) => {
         const raite = await prisma.raite.findFirst({
             where: { id: num }
         });
-        const passengerRaite = await prisma.passengerRaite.findFirst({where:{passengerId, raiteId:num}})
-        
+        const passengerRaite = await prisma.passengerRaite.findFirst({ where: { passengerId, raiteId: num } })
+
         if (!raite)
             return res.status(404).json({ msg: 'Raite not found' });
-        else if(passengerRaite)
+        else if (passengerRaite)
             return res.status(404).json({ msg: 'You are already in this trip' });
         else if (raite.completed == true)
             return res.status(404).json({ msg: 'Raite already completed' });
@@ -124,9 +124,38 @@ const cancelRaite = async (req, res) => {
 
 }
 
+const strike = async (req, res) => {
+    const { driverId, raiteId } = req.params
+    const num = parseInt(raiteId)
+
+    const raite = await prisma.raite.findFirst({
+        where: { id: num },
+        include: {
+          passengers: {
+            where: { passengerId: req.passenger.passengerId }
+          },
+        },
+      });
+
+    const passengerRaite = await prisma.passengerRaite.findFirst({
+        where: { passengerId: req.passenger.passengerId, raiteId: num },
+    });
+
+    const report = await prisma.passengerReport.findFirst({ where: { raiteId: num, accusedDriverId: driverId } })
+
+    // console.log(report)
+    if (report)
+        return res.status(404).json({ msg: "Report Already Created" })
+
+    if ((!passengerRaite) || (raite.passengers.length == 0))
+        return res.status(404).json({ msg: "You Can Not Do This Action" })
+
+}
+
 export {
     getAllRaites,
     getOneRaite,
     acceptRaite,
-    cancelRaite
+    cancelRaite,
+    strike
 }
