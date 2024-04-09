@@ -145,17 +145,21 @@ const strike = async (req, res) => {
     const driver = await prisma.passengerRaite.findFirst({
         where: { passengerId: req.passenger.passengerId, raiteId: num },
         include: {
-          raite: {
-            include: {
-              driver: true
+            raite: {
+                include: {
+                    driver: true
+                }
             }
-          }
         }
-      });
-    const raiteDriverId = driver.raite.driverId
-    const report = await prisma.passengerReport.findFirst({ where: { raiteId: num, accusedDriverId: driverId, reporterPassengerId:req.passenger.passengerId } })
+    });
+    if (!driver)
+        return res.status(404).json({ msg: "Something went wrong" })
 
-    if(raiteDriverId!=driverId)
+    const raiteDriverId = driver?.raite.driverId
+
+    const report = await prisma.passengerReport.findFirst({ where: { raiteId: num, accusedDriverId: driverId, reporterPassengerId: req.passenger.passengerId } })
+
+    if (raiteDriverId != driverId || raiteDriverId == null)
         return res.status(404).json({ msg: "This is not the driver for this raite" })
 
     // console.log(report)
