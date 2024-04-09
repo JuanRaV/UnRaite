@@ -13,74 +13,79 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Admin {
+  adminUsername String  @id
+  password      String
+  token         String? @default("")
+}
+
 model Driver {
-  driverId            String     @id
-  name                String
-  email               String     @unique
-  password            String
-  phoneNumber         Int       @unique
-  frontDriversLicence String
-  backDriversLicence  String
+  driverId               String            @id
+  name                   String
+  email                  String            @unique
+  password               String
+  phoneNumber            Int               @unique
+  frontDriversLicence    String
+  backDriversLicence     String
   frontStudentCredential String
   backStudentCredential  String
-  verified            Boolean @default(false)
-  token               String? @default("")
-  strike              Int?  @default(0) 
-  raites              Raite[]
-  driverReports       DriverReport[]
-  reports             PassengerReport[]
+  verified               Boolean           @default(false)
+  token                  String?           @default("")
+  strike                 Int?              @default(0)
+  raites                 Raite[]
+  driverReports          DriverReport[]
+  reports                PassengerReport[]
 }
 
 model Passenger {
-  passengerId            String     @id
+  passengerId            String            @id
   name                   String
-  email                  String     @unique
-  password               String    
-  phoneNumber            Int       @unique
+  email                  String            @unique
+  password               String
+  phoneNumber            Int               @unique
   frontStudentCredential String
   backStudentCredential  String
-  verified               Boolean @default(false)
-  token                  String? @default("")
-  strike                 Int? @default(0) 
+  verified               Boolean           @default(false)
+  token                  String?           @default("")
+  strike                 Int?              @default(0)
   raite                  PassengerRaite[]
   passangerReports       PassengerReport[]
   reports                DriverReport[]
-
 }
 
 model Raite {
-  id             Int      @id @default(autoincrement())
-  startHour      String
-  date           String
-  start          String
-  startingPoint  String?
-  destination    String
-  arrivalPoint   String?
-  capacity       Int
-  price          Int
-  completed      Boolean @default(false)
-  driver         Driver  @relation(fields: [driverId], references: [driverId])
-  driverId       String
-  passengers     PassengerRaite[]
-  passagnerReports      PassengerReport[]
-  driverReports   DriverReport[]
+  id               Int               @id @default(autoincrement())
+  startHour        String
+  date             String
+  start            String
+  startingPoint    String?
+  destination      String
+  arrivalPoint     String?
+  capacity         Int
+  price            Int
+  completed        Boolean           @default(false)
+  driver           Driver            @relation(fields: [driverId], references: [driverId])
+  driverId         String
+  passengers       PassengerRaite[]
+  passagnerReports PassengerReport[]
+  driverReports    DriverReport[]
 }
 
 model PassengerRaite {
-  passengerId  String
-  raiteId      Int
-  passenger    Passenger @relation(fields: [passengerId], references: [passengerId])
-  raite        Raite     @relation(fields: [raiteId], references: [id])
+  passengerId String
+  raiteId     Int
+  passenger   Passenger @relation(fields: [passengerId], references: [passengerId])
+  raite       Raite     @relation(fields: [raiteId], references: [id])
 
   @@id([passengerId, raiteId])
 }
 
 model PassengerReport {
-  id                  Int      @id @default(autoincrement())
+  id                  Int       @id @default(autoincrement())
   raiteId             Int
   reporterPassengerId String
   accusedDriverId     String
-  raite               Raite    @relation(fields: [raiteId], references: [id])
+  raite               Raite     @relation(fields: [raiteId], references: [id])
   reporterPassenger   Passenger @relation(fields: [reporterPassengerId], references: [passengerId])
   accusedDriver       Driver    @relation(fields: [accusedDriverId], references: [driverId])
 
@@ -88,14 +93,13 @@ model PassengerReport {
 }
 
 model DriverReport {
-  id                  Int      @id @default(autoincrement())
-  raiteId             Int
-  reporterDriverId    String
-  accusedPassengerId  String
-  raite               Raite    @relation(fields: [raiteId], references: [id])
-  reporterDriver      Driver   @relation(fields: [reporterDriverId], references: [driverId])
-  accusedPassenger    Passenger@relation(fields: [accusedPassengerId], references: [passengerId])
+  id                 Int       @id @default(autoincrement())
+  raiteId            Int
+  reporterDriverId   String
+  accusedPassengerId String
+  raite              Raite     @relation(fields: [raiteId], references: [id])
+  reporterDriver     Driver    @relation(fields: [reporterDriverId], references: [driverId])
+  accusedPassenger   Passenger @relation(fields: [accusedPassengerId], references: [passengerId])
 
   @@index([raiteId])
 }
-

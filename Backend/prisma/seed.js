@@ -15,6 +15,15 @@ async function main() {
   // }
 
   const hashedPassword = await bcrypt.hash('123', 10);
+  const adminHashedPassword = await bcrypt.hash("Jrrv2311@",10)
+
+  const admin = await prisma.admin.create({
+    data:{
+      adminUsername: "JuanRaV231102",
+      password: adminHashedPassword
+    }
+  })
+  
   const driver1 = await prisma.driver.upsert({
     where: { email: 'alice@example.com' },
     update: {},
