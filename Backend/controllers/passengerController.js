@@ -119,7 +119,8 @@ const cancelRaite = async (req, res) => {
         });
         res.json({ msg: 'Raite canceled successfully' });
     } catch (error) {
-        console.log(error)
+        console.error(error);
+        res.status(500).json({ msg: 'Internal server error' });
     }
 
 }
@@ -131,17 +132,31 @@ const strike = async (req, res) => {
     const raite = await prisma.raite.findFirst({
         where: { id: num },
         include: {
-          passengers: {
-            where: { passengerId: req.passenger.passengerId }
-          },
+            passengers: {
+                where: { passengerId: req.passenger.passengerId }
+            },
         },
-      });
+    });
 
     const passengerRaite = await prisma.passengerRaite.findFirst({
         where: { passengerId: req.passenger.passengerId, raiteId: num },
     });
 
-    const report = await prisma.passengerReport.findFirst({ where: { raiteId: num, accusedDriverId: driverId } })
+    const driver = await prisma.passengerRaite.findFirst({
+        where: { passengerId: req.passenger.passengerId, raiteId: num },
+        include: {
+          raite: {
+            include: {
+              driver: true
+            }
+          }
+        }
+      });
+    const raiteDriverId = driver.raite.driverId
+    const report = await prisma.passengerReport.findFirst({ where: { raiteId: num, accusedDriverId: driverId, reporterPassengerId:req.passenger.passengerId } })
+
+    if(raiteDriverId!=driverId)
+        return res.status(404).json({ msg: "This is not the driver for this raite" })
 
     // console.log(report)
     if (report)
@@ -150,6 +165,33 @@ const strike = async (req, res) => {
     if ((!passengerRaite) || (raite.passengers.length == 0))
         return res.status(404).json({ msg: "You Can Not Do This Action" })
 
+    try {
+        await prisma.passengerReport.create({
+            data: {
+                raiteId: num,
+                reporterPassengerId: req.passenger.passengerId,
+                accusedDriverId: driverId
+            }
+        });
+        const count = await prisma.passengerReport.count({
+            where: { accusedDriverId: driverId, raiteId: num },
+        });
+        console.log(count)
+        if (count >= 2) {
+            const driver = await prisma.driver.update({
+                where: { driverId },
+                data: {
+                    strike: {
+                        increment: 1
+                    }
+                }
+            })
+        }
+        return res.json({ msg: `Report created successfully` })
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ msg: 'Internal server error' });
+    }
 }
 
 export {

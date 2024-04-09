@@ -125,9 +125,11 @@ const login = async (req,res) =>{
     //Check if that user exists:
     const passenger = await prisma.passenger.findFirst({where:{email}})
     const driver = await prisma.driver.findFirst({where:{email}})
-    
+    const driverStrike = driver?.strike
+    const passengerStrike = passenger?.strike
     const user = passenger || driver
-    console.log(user)
+    console.log(driverStrike)
+    console.log(passengerStrike)
     
 
     if(!user){
@@ -143,33 +145,43 @@ const login = async (req,res) =>{
 
     //Check password
     if(driver){
-        if(await checkPassword(driver,req.body.password)){
-            // return res.json({msg:"Driver LOGIN"})
-            res.json({
-                driverId:driver.driverId,
-                name:driver.name,
-                email: driver.email,
-                phoneNumber: driver.phoneNumber,
-                token: generateJWT(driver.driverId)
-            })
+        if(driverStrike>=2){
+            const error = new Error("Account blocked, your number of strikes exceds the number of 2")
+            return res.status(404).json({msg:error.message}) 
         }else{
-            const error = new Error("Incorrect Password")
-            return res.status(404).json({msg:error.message})
-        } 
+            if(await checkPassword(driver,req.body.password)){
+                // return res.json({msg:"Driver LOGIN"})
+                res.json({
+                    driverId:driver.driverId,
+                    name:driver.name,
+                    email: driver.email,
+                    phoneNumber: driver.phoneNumber,
+                    token: generateJWT(driver.driverId)
+                })
+            }else{
+                const error = new Error("Incorrect Password")
+                return res.status(404).json({msg:error.message})
+            } 
+        }
     }
-    else if(passenger ){
-        if(await checkPassword(passenger,req.body.password)){
-            // return res.json({msg:"Passenger LOGIN"})
-            res.json({
-                passengerId:passenger.passengerId,
-                name:passenger.name,
-                email: passenger.email,
-                phoneNumber: passenger.phoneNumber,
-                token: generateJWT(passenger.passengerId)
-            })
+    else if(passenger){
+        if(passengerStrike>=2){
+            const error = new Error("Account blocked, your number of strikes exceds the number of 2")
+            return res.status(404).json({msg:error.message}) 
         }else{
-            const error = new Error("Incorrect Password")
-            return res.status(404).json({msg:error.message})
+            if(await checkPassword(passenger,req.body.password)){
+                // return res.json({msg:"Passenger LOGIN"})
+                res.json({
+                    passengerId:passenger.passengerId,
+                    name:passenger.name,
+                    email: passenger.email,
+                    phoneNumber: passenger.phoneNumber,
+                    token: generateJWT(passenger.passengerId)
+                })
+            }else{
+                const error = new Error("Incorrect Password")
+                return res.status(404).json({msg:error.message})
+            }
         }
     }
 }
