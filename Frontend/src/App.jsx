@@ -1,11 +1,26 @@
-import { useState } from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
-function App() {
-  const [count, setCount] = useState(0)
+import AuthLayout from './layouts/AuthLayout'
+
+import PassengerSignUp from './pages/PassengerSignUp'
+
+import { AuthProvider } from './context/AuthProvider'
+
+
+const App = ()=> {
+
   return (
-    <h1 className="text-3xl font-bold underline text-red-500">
-      Hello world!
-    </h1>
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          {/* Public Area */}
+          <Route path='/' element={<AuthLayout/>}>
+              <Route path='passenger-signup' element={<PassengerSignUp/>}/>
+              {/* <Route path='login' element={<LogIn/>}/> */}
+          </Route>
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
   )
 }
 
