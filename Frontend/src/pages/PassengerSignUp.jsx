@@ -2,11 +2,12 @@ import { useState } from "react"
 import { Link } from "react-router-dom"
 import Alert from '../components/Alert'
 import axiosClient from "../config/axiosClient"
+import axios from "axios"
 
 const SignUp = () => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
-  const [phoneNumber, setPhoneNumber] = useState('')
+  const [phoneNumber, setPhoneNumber] = useState(0)
   const [idFront, setIdFront] = useState(null)
   const [idBack, setIdBack] = useState(null)
   const [password, setPassword] = useState('')
@@ -25,8 +26,12 @@ const SignUp = () => {
 
     // Validate file type (optional)
     if (!selectedFile.type.match('image/*')) {
-      <Alert alert="Invalid file type. Please select an image."/>
-      return;
+      setAlert({
+        msg: "Invalid file type. Please select an image.",
+        error: true
+      })
+      alertDisapears()
+      return
     }
     setIdFront(selectedFile);
   };
@@ -41,11 +46,12 @@ const SignUp = () => {
         msg: "Invalid file type. Please select an image.",
         error: true
       })
-      return;
+      alertDisapears()
+      return
     }
     setIdBack(selectedFile);
   };
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault()
     if ([name, email, phoneNumber, idFront, idBack, password, repeatPassword].includes('')) {
       setAlert({
@@ -55,7 +61,52 @@ const SignUp = () => {
       alertDisapears()
       return
     }
+    if (password !== repeatPassword) {
+      setAlert({
+        msg: "Passwords don't match",
+        error: true
+      })
+      alertDisapears()
+      return
+    }
+    if (password.length < 6) {
+      setAlert({
+        msg: "Password to short",
+        error: true
+      })
+      alertDisapears()
+      return
+    }
+    // Connect with back and create user
+    const number = parseInt(phoneNumber)
+    try {
+      const { data } = await axiosClient.post('/api/users/signup/passenger', {
+        name,
+        email,
+        phoneNumber:number,
+        password,
+        frontStudentCredential: idFront,
+        backStudentCredential: idBack
+      })
+      setAlert({
+        msg:data.msg,
+        error:false
+      })
+      setName('')
+      setEmail('')
+      setPhoneNumber('')
+      setIdFront(null)
+      setIdBack(null)
+      setPassword('')
+      setRepeatPassword('')
+    } catch (error) {
+      setAlert({
+        msg: error.response.data.msg,
+        error: true
+      })
+    }
   }
+
 
   const { msg } = alert
 
@@ -103,7 +154,7 @@ const SignUp = () => {
           <input
             id="phone"
             type="number"
-            placeholder="1133552244"
+            placeholder="Ex. 1133552244"
             className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
             value={phoneNumber}
             onChange={e => setPhoneNumber(e.target.value)}
@@ -141,7 +192,52 @@ const SignUp = () => {
             onChange={handleBackImageChange} // Handle file selection
           />
         </div>
+        <div className="my-5">
+          <label
+            className="uppercase text-gray-600 block text-xl font-bold"
+            htmlFor="password"
+          >Password</label>
+          <input
+            id="password"
+            type="password"
+            placeholder="Ex. Your super secret password"
+            className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+          />
+        </div>
+        <div className="my-5">
+          <label
+            className="uppercase text-gray-600 block text-xl font-bold"
+            htmlFor="repeat-password"
+          >Repeat password</label>
+          <input
+            id="repeat-password"
+            type="password"
+            placeholder="Ex. Your super secret password * 2"
+            className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+            value={repeatPassword}
+            onChange={e => setRepeatPassword(e.target.value)}
+          />
+        </div>
+        <input
+          type="submit"
+          value="Sign Up"
+          className="bg-indigo-600 mb-5 w-full p-3 text-white uppercase font-bold rounded-lg hover:cursor-pointer hover:bg-indigo-800 transition-colors"
+        />
       </form>
+      <nav className="lg:flex lg:justify-between">
+        <Link
+          className="block text-center my-3 text-slate-500 uppercase text-sm"
+          to="/"
+        >
+          Already Have an Account? Sign In</Link>
+        <Link
+          className="block text-center my-3 text-slate-500 uppercase text-sm"
+          to="/forgot-password"
+        >
+          Forgot my Password</Link>
+      </nav>
     </>
 
   )
