@@ -14,7 +14,7 @@ app.use(express.json())
 dotenv.config()
 
 const whiteList = [process.env.FRONTEND_URL] 
-  
+   
 const corsOptions = {
   origin: function(origin, callback){
     if(whiteList.includes(origin))
