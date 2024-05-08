@@ -288,6 +288,30 @@ async function main() {
       raiteId: raite2.id
     }
   })
+
+  await prisma.townToGdl.upsert({
+    where: {
+      id: 1
+    },
+    update:{},
+    create:{
+      townName: "San Miguel El Alto",
+      price: 160
+    }
+  })
+
+  await prisma.townToGdl.upsert({
+    where: {
+      id: 2
+    },
+    update:{},
+    create:{
+      townName: "San Sebastian El Grande",
+      price: 200
+    }
+  })
+
+
   console.log({ driver1, driver2, driver3, passenger1, passenger2, driverpass1 });
 }
 

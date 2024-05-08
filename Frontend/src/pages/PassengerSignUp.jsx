@@ -23,7 +23,7 @@ const SignUp = () => {
     const selectedFile = event.target.files[0];
     // Check if a file is actually selected
     if (!selectedFile) return;
-
+    console.log(selectedFile)
     // Validate file type (optional)
     if (!selectedFile.type.match('image/*')) {
       setAlert({
@@ -33,13 +33,14 @@ const SignUp = () => {
       alertDisapears()
       return
     }
-    setIdFront(selectedFile);
+    const filePath = URL.createObjectURL(selectedFile);
+    setIdFront(filePath);
   };
   const handleBackImageChange = (event) => {
     const selectedFile = event.target.files[0];
     // Check if a file is actually selected
     if (!selectedFile) return;
-
+    console.log(selectedFile)
     // Validate file type (optional)
     if (!selectedFile.type.match('image/*')) {
       setAlert({
