@@ -19,16 +19,9 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
 
     console.log("upload filename:",file)
-    if (!file.fieldname) {
-      // Ignore files without fieldname attribute
-      return;
-    }
-    
     if (file.fieldname == 'frontStudentCredential' || file.fieldname === 'backStudentCredential' ) {
-      console.log(req.body)
+      console.log("upload pN: ",req.body.phoneNumber)
       cb(null, `${req.body.phoneNumber}.${file.mimetype.split('/')[1]}`);
-    /*} else if (file.fieldname === 'cv') {
-      cb(null, `${req.body.studentId}.pdf`);*/
     }else {
       cb(new Error('Invalid fieldname'), false);
     }

@@ -18,7 +18,7 @@ const passengersSignUp = async (req,res)=>{
     const existingPassengerEmail = await prisma.passenger.findUnique({where:{email}})
     let phoneNum = parseInt(phoneNumber)
     const existingPassengerNumber = await prisma.passenger.findUnique({where:{phoneNumber:phoneNum}})
-    console.log("req file: ",req.file)
+
     console.log("----------------------------")
     console.log("frontStudentCredential: ",frontStudentCredential) 
     console.log("backStudentCredential: ",backStudentCredential) 
@@ -52,7 +52,7 @@ const passengersSignUp = async (req,res)=>{
                 name,
                 email,
                 password:hashedPassword, 
-                phoneNumber: parseInt(phoneNum),
+                phoneNumber:phoneNum,
                 frontStudentCredential:'uploads/frontStudentCredentials/'+frontStudentCredential.filename,
                 backStudentCredential:`uploads/backStudentCredentials/${backStudentCredential.filename}`,
                 verified: false,
