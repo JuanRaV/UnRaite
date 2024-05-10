@@ -2,21 +2,34 @@ import multer from 'multer';
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    if (file.fieldname === 'frontStudentCredential') {
-      cb(null, 'uploads/frontStudentCredential/');
-    } else if (file.fieldname === 'backStudentCredential') {
-      cb(null, 'uploads/backStudentCredential/');
+    console.log("upload:",file)
+    if (!file.fieldname) {
+      // Ignore files without fieldname attribute
+      return;
+    }
+    console.log("req body: ",req.body)
+    if (file.fieldname == 'frontStudentCredential') {
+      cb(null, 'uploads/frontStudentCredentials/');
+    } else if (file.fieldname == 'backStudentCredential') {
+      cb(null, 'uploads/backStudentCredentials/');
     } else {
       cb(new Error('Invalid fieldname'), false);
     }
   },
   filename: (req, file, cb) => {
-    if (file.fieldname === 'frontStudentCredential' || file.fieldname === 'frontStudentCredential' ) {
+
+    console.log("upload filename:",file)
+    if (!file.fieldname) {
+      // Ignore files without fieldname attribute
+      return;
+    }
+    
+    if (file.fieldname == 'frontStudentCredential' || file.fieldname === 'backStudentCredential' ) {
       console.log(req.body)
-      cb(null, `${req.body.passangerId}.${file.mimetype.split('/')[1]}`);
+      cb(null, `${req.body.phoneNumber}.${file.mimetype.split('/')[1]}`);
     /*} else if (file.fieldname === 'cv') {
       cb(null, `${req.body.studentId}.pdf`);*/
-    } else {
+    }else {
       cb(new Error('Invalid fieldname'), false);
     }
   },

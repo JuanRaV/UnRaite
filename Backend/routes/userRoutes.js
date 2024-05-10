@@ -1,10 +1,10 @@
 import express from 'express'
 import { registerUser, login, forgotPassword, checkToken, newPassword, driverProfile, passengerProfile } from '../controllers/userController.js'
 import { checkDriversAuth, checkPassengersAuth } from '../middleware/checkAuth.js'
-import multer from 'multer';
+import { upload } from '../utils/upload.js'
 
 const router = express.Router()
-const upload = multer();
+
 
 router.post("/signup/passenger",upload.fields([{ name: 'frontStudentCredential', maxCount: 1 }, { name: 'backStudentCredential', maxCount: 1 }]), registerUser)
 router.post("/signup/driver", registerUser)

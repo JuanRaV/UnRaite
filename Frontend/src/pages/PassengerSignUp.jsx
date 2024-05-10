@@ -19,7 +19,17 @@ const SignUp = () => {
       setAlert({})
     }, 3000)
   }
-  const handleFrontImageChange = (event) => {
+
+  const onfrontStudentCredentialChange = e =>{
+    console.log(e.target.files[0])
+    setIdFront({frontStudentCredential:e.target.files[0]})
+  }
+
+  const onBackStudentCredentialChange = e => {
+    console.log(e.target.files[0]);
+    setIdBack({backStudentCredential:e.target.files[0]}); // Set the file object directly
+  };
+  /*const handleFrontImageChange = (event) => {
     const selectedFile = event.target.files[0];
     // Check if a file is actually selected
     if (!selectedFile) return;
@@ -49,9 +59,9 @@ const SignUp = () => {
       })
       alertDisapears()
       return
-    }
+    }12345678
     setIdBack(selectedFile);
-  };
+  };*/
   const handleSubmit = async e => {
     e.preventDefault()
     if ([name, email, phoneNumber, idFront, idBack, password, repeatPassword].includes('')) {
@@ -78,6 +88,13 @@ const SignUp = () => {
       alertDisapears()
       return
     }
+
+    console.log(idFront)
+    const formData = new FormData()
+
+    formData.append('frontStudentCredential', idFront);
+    formData.append('backStudentCredential', idBack);
+    console.log("formDAta:",formData.frontStudentCredential)
     // Connect with back and create user
     const number = parseInt(phoneNumber)
     try {
@@ -101,6 +118,7 @@ const SignUp = () => {
       setPassword('')
       setRepeatPassword('')
     } catch (error) {
+      console.error(error)
       setAlert({
         msg: error.response.data.msg,
         error: true
@@ -174,7 +192,7 @@ const SignUp = () => {
             accept="image/*" // Restrict accepted file types (optional)
             placeholder="Select an image" // Placeholder text (optional)
             className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
-            onChange={handleFrontImageChange} // Handle file selection
+            onChange={onfrontStudentCredentialChange} // Handle file selection -- handleFrontImageChange
           />
         </div>
         <div className="my-5">
@@ -190,7 +208,7 @@ const SignUp = () => {
             accept="image/*" // Restrict accepted file types (optional)
             placeholder="Select an image" // Placeholder text (optional)
             className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
-            onChange={handleBackImageChange} // Handle file selection
+            onChange={onBackStudentCredentialChange} // Handle file selection
           />
         </div>
         <div className="my-5">

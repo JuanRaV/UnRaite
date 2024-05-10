@@ -12,8 +12,8 @@ const app = express();
 app.use(express.json())
 
 dotenv.config()
-
-const whiteList = ['http://localhost:5173', 'http://127.0.0.1:5173'] 
+/*
+const whiteList = ['http://localhost:5173', 'http://127.0.0.1:5173','http://localhost:3000'] 
    
 const corsOptions = {
   origin: function(origin, callback){
@@ -27,7 +27,7 @@ const corsOptions = {
 app.use(cors(corsOptions))
 
 app.options('*', cors(corsOptions)); 
-
+*/
 
 
 //Routes

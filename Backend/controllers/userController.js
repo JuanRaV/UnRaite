@@ -16,7 +16,8 @@ const passengersSignUp = async (req,res)=>{
     const frontStudentCredential = req.files && req.files.frontStudentCredential ? req.files.frontStudentCredential[0] : undefined;
     const backStudentCredential = req.files && req.files.backStudentCredential ? req.files.backStudentCredential[0] : undefined;
     const existingPassengerEmail = await prisma.passenger.findUnique({where:{email}})
-    const existingPassengerNumber = await prisma.passenger.findUnique({where:{phoneNumber}})
+    let phoneNum = parseInt(phoneNumber)
+    const existingPassengerNumber = await prisma.passenger.findUnique({where:{phoneNumber:phoneNum}})
     console.log("req file: ",req.file)
     console.log("----------------------------")
     console.log("frontStudentCredential: ",frontStudentCredential)
@@ -43,16 +44,16 @@ const passengersSignUp = async (req,res)=>{
             fs.unlinkSync(oldImagePath);
         }
         }*/
-        console.log(frontStudentCredential)
+        
         const passenger = await prisma.passenger.create({
             data:{
                 passengerId:'p' + generateID(),
                 name,
                 email,
                 password:hashedPassword, 
-                phoneNumber,
-                frontStudentCredential:`uploads/frontStudentCredentials/${frontStudentCredential.filename}`,
-                backStudentCredential,
+                phoneNumber: parseInt(phoneNum),
+                frontStudentCredential:'uploads/frontStudentCredentials/'+frontStudentCredential.filename,
+                backStudentCredential:`uploads/backStudentCredentials/${backStudentCredential.filename}`,
                 verified: false,
                 // token: 'p' + generateID()
             }
