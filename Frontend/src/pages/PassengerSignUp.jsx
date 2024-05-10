@@ -8,8 +8,8 @@ const SignUp = () => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [phoneNumber, setPhoneNumber] = useState(0)
-  const [idFront, setIdFront] = useState(null)
-  const [idBack, setIdBack] = useState(null)
+  const [idFront, setIdFront] = useState()
+  const [idBack, setIdBack] = useState()
   const [password, setPassword] = useState('')
   const [repeatPassword, setRepeatPassword] = useState('')
   const [alert, setAlert] = useState({})
@@ -20,20 +20,11 @@ const SignUp = () => {
     }, 3000)
   }
 
-  const onfrontStudentCredentialChange = e =>{
-    console.log(e.target.files[0])
-    setIdFront({frontStudentCredential:e.target.files[0]})
-  }
-
-  const onBackStudentCredentialChange = e => {
-    console.log(e.target.files[0]);
-    setIdBack({backStudentCredential:e.target.files[0]}); // Set the file object directly
-  };
   const handleFrontImageChange = (event) => {
     const selectedFile = event.target.files[0];
     // Check if a file is actually selected
     if (!selectedFile) return;
-    console.log(selectedFile)
+    console.log("hi",selectedFile)
     // Validate file type (optional)
     if (!selectedFile.type.match('image/*')) {
       setAlert({
@@ -43,8 +34,8 @@ const SignUp = () => {
       alertDisapears()
       return
     }
-    const filePath = URL.createObjectURL(selectedFile);
-    setIdFront(filePath);
+    
+    setIdFront(selectedFile);
   };
   const handleBackImageChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -60,8 +51,8 @@ const SignUp = () => {
       alertDisapears()
       return
     }
-    const filePath = URL.createObjectURL(selectedFile);
-    setIdBack(filePath);
+ 
+    setIdBack(selectedFile);
   };
   const handleSubmit = async e => {
     e.preventDefault()
@@ -92,25 +83,38 @@ const SignUp = () => {
 
     console.log(idFront)
     const formData = new FormData()
-
-    formData.append('frontStudentCredential', idFront);
-    formData.append('backStudentCredential', idBack);
-    console.log("formDAta:",formData.frontStudentCredential)
+    formData.append("frontStudentCredential",idFront)
+    formData.append("backStudentCredential",idBack)
+    //name, email, phoneNumber, idFront, idBack, password, repeatPassword
+    formData.append("name",name)
+    formData.append("email",email)
+    formData.append("phoneNumber",phoneNumber)
+    formData.append("password",password)
+    
     // Connect with back and create user
+
+
     const number = parseInt(phoneNumber)
-    try {
-      const { data } = await axiosClient.post('/api/users/signup/passenger', {
+    //try {
+      /*const { data } =*/ await axiosClient.post('/api/users/signup/passenger',formData,{
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      } /*{
         name,
         email,
         phoneNumber:number,
         password,
         frontStudentCredential: idFront,
         backStudentCredential: idBack
-      })
-      setAlert({
-        msg:data.msg,
-        error:false
-      })
+      }*/
+    ).then((response)=>{
+      console.log(response)
+    }).catch(er=>console.log(er))
+      //setAlert({
+      //  msg:data.msg,
+      //  error:false
+      //})
       setName('')
       setEmail('')
       setPhoneNumber('')
@@ -118,13 +122,15 @@ const SignUp = () => {
       setIdBack(null)
       setPassword('')
       setRepeatPassword('')
-    } catch (error) {
+      setIdBack()
+      setIdFront()
+    /*} catch (error) {
       console.error(error)
       setAlert({
         msg: error.response.data.msg,
         error: true
       })
-    }
+    }*/
   }
 
 
@@ -189,11 +195,12 @@ const SignUp = () => {
           </label>
           <input
             id="idFront"
+         
             type="file" // Change type to "file" for image upload
             accept="image/*" // Restrict accepted file types (optional)
             placeholder="Select an image" // Placeholder text (optional)
             className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
-            onChange={onfrontStudentCredentialChange} // Handle file selection -- handleFrontImageChange
+            onChange={handleFrontImageChange} // Handle file selection -- handleFrontImageChange
           />
         </div>
         <div className="my-5">
@@ -209,7 +216,7 @@ const SignUp = () => {
             accept="image/*" // Restrict accepted file types (optional)
             placeholder="Select an image" // Placeholder text (optional)
             className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
-            onChange={onBackStudentCredentialChange} // Handle file selection
+            onChange={handleBackImageChange} // Handle file selection
           />
         </div>
         <div className="my-5">
