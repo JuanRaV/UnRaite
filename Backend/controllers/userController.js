@@ -8,11 +8,19 @@ const prisma = new PrismaClient()
 //PASSENGER SIGNUP
 const passengersSignUp = async (req,res)=>{
     // Avoid duplicates
-    const {name, email, password, phoneNumber, frontStudentCredential, backStudentCredential, verified} = req.body
-
+    console.log("----------------------------")
+    console.log("req.body", req.body)
+    console.log("req files: ",req.files)
+    console.log("----------------------------")
+    const {name, email, password, phoneNumber, verified} = req.body
+    const frontStudentCredential = req.files && req.files.frontStudentCredential ? req.files.frontStudentCredential[0] : undefined;
+    const backStudentCredential = req.files && req.files.backStudentCredential ? req.files.backStudentCredential[0] : undefined;
     const existingPassengerEmail = await prisma.passenger.findUnique({where:{email}})
     const existingPassengerNumber = await prisma.passenger.findUnique({where:{phoneNumber}})
-
+    console.log("req file: ",req.file)
+    console.log("----------------------------")
+    console.log("frontStudentCredential: ",frontStudentCredential)
+    
     if(existingPassengerEmail){
         const error = new Error("Account already registered")
         return res.status(400).json({msg:error.message})
@@ -22,6 +30,20 @@ const passengersSignUp = async (req,res)=>{
     }
     try{
         const hashedPassword = await bcrypt.hash(password, 10);
+
+        //Crear directorio
+        /*const dirPath=path.join(__dirname, '..', 'uploads',`profile_images`)
+        if(!fs.existsSync(dirPath)){
+        fs.mkdirSync(dirPath,{recursive:true})
+        }
+        // Elimina la imagen de perfil anterior si existe
+        if (currentStudent.profileImage) {
+        const oldImagePath = path.join(__dirname, '..', currentStudent.profileImage);
+        if (fs.existsSync(oldImagePath)) {
+            fs.unlinkSync(oldImagePath);
+        }
+        }*/
+        console.log(frontStudentCredential)
         const passenger = await prisma.passenger.create({
             data:{
                 passengerId:'p' + generateID(),
@@ -29,13 +51,13 @@ const passengersSignUp = async (req,res)=>{
                 email,
                 password:hashedPassword, 
                 phoneNumber,
-                frontStudentCredential,
+                frontStudentCredential:`uploads/frontStudentCredentials/${frontStudentCredential.filename}`,
                 backStudentCredential,
                 verified: false,
                 // token: 'p' + generateID()
             }
         })
-        console.log(passenger)
+       
         res.json({msg:"User created successfully, wait until the admin verified you account"})
     }catch(error){
         console.log(error)
