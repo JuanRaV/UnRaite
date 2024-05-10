@@ -10,6 +10,8 @@ const SignUp = () => {
   const [phoneNumber, setPhoneNumber] = useState(0)
   const [idFront, setIdFront] = useState(null)
   const [idBack, setIdBack] = useState(null)
+  const [licenceFront, setLicenceFront] = useState(null)
+  const [licenceBack, setLicenceBack] = useState(null)
   const [password, setPassword] = useState('')
   const [repeatPassword, setRepeatPassword] = useState('')
   const [alert, setAlert] = useState({})
@@ -19,16 +21,6 @@ const SignUp = () => {
       setAlert({})
     }, 3000)
   }
-
-  const onfrontStudentCredentialChange = e =>{
-    console.log(e.target.files[0])
-    setIdFront({frontStudentCredential:e.target.files[0]})
-  }
-
-  const onBackStudentCredentialChange = e => {
-    console.log(e.target.files[0]);
-    setIdBack({backStudentCredential:e.target.files[0]}); // Set the file object directly
-  };
   const handleFrontImageChange = (event) => {
     const selectedFile = event.target.files[0];
     // Check if a file is actually selected
@@ -63,6 +55,41 @@ const SignUp = () => {
     const filePath = URL.createObjectURL(selectedFile);
     setIdBack(filePath);
   };
+
+  const handleFrontLicenceImageChange = (event) => {
+    const selectedFile = event.target.files[0];
+    // Check if a file is actually selected
+    if (!selectedFile) return;
+    console.log(selectedFile)
+    // Validate file type (optional)
+    if (!selectedFile.type.match('image/*')) {
+      setAlert({
+        msg: "Invalid file type. Please select an image.",
+        error: true
+      })
+      alertDisapears()
+      return
+    }
+    const filePath = URL.createObjectURL(selectedFile);
+    setLicenceFront(filePath);
+  };
+  const handleBackLicenceImageChange = (event) => {
+    const selectedFile = event.target.files[0];
+    // Check if a file is actually selected
+    if (!selectedFile) return;
+    console.log(selectedFile)
+    // Validate file type (optional)
+    if (!selectedFile.type.match('image/*')) {
+      setAlert({
+        msg: "Invalid file type. Please select an image.",
+        error: true
+      })
+      alertDisapears()
+      return
+    }
+    const filePath = URL.createObjectURL(selectedFile);
+    setLicenceBack(filePath);
+  };
   const handleSubmit = async e => {
     e.preventDefault()
     if ([name, email, phoneNumber, idFront, idBack, password, repeatPassword].includes('')) {
@@ -89,13 +116,6 @@ const SignUp = () => {
       alertDisapears()
       return
     }
-
-    console.log(idFront)
-    const formData = new FormData()
-
-    formData.append('frontStudentCredential', idFront);
-    formData.append('backStudentCredential', idBack);
-    console.log("formDAta:",formData.frontStudentCredential)
     // Connect with back and create user
     const number = parseInt(phoneNumber)
     try {
@@ -119,7 +139,6 @@ const SignUp = () => {
       setPassword('')
       setRepeatPassword('')
     } catch (error) {
-      console.error(error)
       setAlert({
         msg: error.response.data.msg,
         error: true
@@ -132,7 +151,7 @@ const SignUp = () => {
 
   return (
     <>
-      <h1 className="text-indigo-400 font-black text-6xl capitalize">Create an Account & Start Booking <span className="text-indigo-600">Raites</span></h1>
+      <h1 className="text-indigo-400 font-black text-6xl capitalize">Create an Account & Start Giving <span className="text-indigo-600">Raites</span></h1>
       {msg && <Alert alert={alert} />}
       <form
         className="my-10 bg-white shadow rounded-lg p-10"
@@ -193,7 +212,7 @@ const SignUp = () => {
             accept="image/*" // Restrict accepted file types (optional)
             placeholder="Select an image" // Placeholder text (optional)
             className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
-            onChange={onfrontStudentCredentialChange} // Handle file selection -- handleFrontImageChange
+            onChange={handleFrontImageChange} // Handle file selection
           />
         </div>
         <div className="my-5">
@@ -209,7 +228,39 @@ const SignUp = () => {
             accept="image/*" // Restrict accepted file types (optional)
             placeholder="Select an image" // Placeholder text (optional)
             className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
-            onChange={onBackStudentCredentialChange} // Handle file selection
+            onChange={handleBackImageChange} // Handle file selection
+          />
+        </div>
+        <div className="my-5">
+          <label
+            className="uppercase text-gray-600 block text-xl font-bold"
+            htmlFor="idLFront"
+          >
+            Front Drivers Licence Image
+          </label>
+          <input
+            id="idLFront"
+            type="file" // Change type to "file" for image upload
+            accept="image/*" // Restrict accepted file types (optional)
+            placeholder="Select an image" // Placeholder text (optional)
+            className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+            onChange={handleFrontLicenceImageChange} // Handle file selection
+          />
+        </div>
+        <div className="my-5">
+          <label
+            className="uppercase text-gray-600 block text-xl font-bold"
+            htmlFor="idLBack"
+          >
+            Back Drivers Licence Image
+          </label>
+          <input
+            id="idLBack"
+            type="file" // Change type to "file" for image upload
+            accept="image/*" // Restrict accepted file types (optional)
+            placeholder="Select an image" // Placeholder text (optional)
+            className="w-full mt-3 p-3 border rounded-xl bg-gray-50"
+            onChange={handleBackLicenceImageChange} // Handle file selection
           />
         </div>
         <div className="my-5">
