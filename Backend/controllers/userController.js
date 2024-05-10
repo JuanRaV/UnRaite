@@ -19,7 +19,8 @@ const passengersSignUp = async (req,res)=>{
     const existingPassengerNumber = await prisma.passenger.findUnique({where:{phoneNumber}})
     console.log("req file: ",req.file)
     console.log("----------------------------")
-    console.log("frontStudentCredential: ",frontStudentCredential)
+    console.log("frontStudentCredential: ",frontStudentCredential) 
+    console.log("backStudentCredential: ",backStudentCredential) 
     
     if(existingPassengerEmail){
         const error = new Error("Account already registered")
@@ -52,11 +53,11 @@ const passengersSignUp = async (req,res)=>{
                 password:hashedPassword, 
                 phoneNumber,
                 frontStudentCredential:`uploads/frontStudentCredentials/${frontStudentCredential.filename}`,
-                backStudentCredential,
+                backStudentCredential: `uploads/backStudentCredentials/${backStudentCredential.filename}`,
                 verified: false,
                 // token: 'p' + generateID()
             }
-        })
+        }) 
        
         res.json({msg:"User created successfully, wait until the admin verified you account"})
     }catch(error){

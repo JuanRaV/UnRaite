@@ -1,8 +1,11 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 import AuthLayout from './layouts/AuthLayout'
+import ProtectedRoute from './layouts/ProtectedRoute'
 
+import LogIn from './pages/LogIn'
 import PassengerSignUp from './pages/PassengerSignUp'
+import DriverSignUp from './pages/DriverSignUp'
 
 import { AuthProvider } from './context/AuthProvider'
 
@@ -15,8 +18,15 @@ const App = ()=> {
         <Routes>
           {/* Public Area */}
           <Route path='/' element={<AuthLayout/>}>
-              <Route path='passenger-signup' element={<PassengerSignUp/>}/>
+              <Route index element={<LogIn/>}/>
+              <Route path='signUp/passenger' element={<PassengerSignUp/>}/>
+              <Route path='signUp/driver' element={<DriverSignUp/>}/>
               {/* <Route path='login' element={<LogIn/>}/> */}
+          </Route>
+
+          {/* Private Area */}
+          <Route path='/raites' element={<ProtectedRoute/>}>
+
           </Route>
         </Routes>
       </AuthProvider>
