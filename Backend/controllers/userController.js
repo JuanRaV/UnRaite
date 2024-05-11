@@ -8,10 +8,10 @@ const prisma = new PrismaClient()
 //PASSENGER SIGNUP
 const passengersSignUp = async (req,res)=>{
     // Avoid duplicates
-    console.log("----------------------------")
-    console.log("req.body", req.body)
-    console.log("req files: ",req.files)
-    console.log("----------------------------")
+    // console.log("----------------------------")
+    // console.log("req.body", req.body)
+    // console.log("req files: ",req.files)
+    // console.log("----------------------------")
     const {name, email, password, phoneNumber, verified} = req.body
     const frontStudentCredential = req.files && req.files.frontStudentCredential ? req.files.frontStudentCredential[0] : undefined;
     const backStudentCredential = req.files && req.files.backStudentCredential ? req.files.backStudentCredential[0] : undefined;
@@ -19,11 +19,11 @@ const passengersSignUp = async (req,res)=>{
     let phoneNum = parseInt(phoneNumber)
     const existingPassengerNumber = await prisma.passenger.findUnique({where:{phoneNumber:phoneNum}})
 
-    console.log("----------------------------")
-    console.log("frontStudentCredential: ",frontStudentCredential) 
-    console.log("backStudentCredential: ",backStudentCredential) 
+    // console.log("----------------------------")
+    // console.log("frontStudentCredential: ",frontStudentCredential) 
+    // console.log("backStudentCredential: ",backStudentCredential) 
     
-    if(existingPassengerEmail){
+    if(existingPassengerEmail){ 
         const error = new Error("Account already registered")
         return res.status(400).json({msg:error.message})
     }else if(existingPassengerNumber){
@@ -32,19 +32,6 @@ const passengersSignUp = async (req,res)=>{
     }
     try{
         const hashedPassword = await bcrypt.hash(password, 10);
-
-        //Crear directorio
-        /*const dirPath=path.join(__dirname, '..', 'uploads',`profile_images`)
-        if(!fs.existsSync(dirPath)){
-        fs.mkdirSync(dirPath,{recursive:true})
-        }
-        // Elimina la imagen de perfil anterior si existe
-        if (currentStudent.profileImage) {
-        const oldImagePath = path.join(__dirname, '..', currentStudent.profileImage);
-        if (fs.existsSync(oldImagePath)) {
-            fs.unlinkSync(oldImagePath);
-        }
-        }*/
         
         const passenger = await prisma.passenger.create({
             data:{
@@ -58,7 +45,7 @@ const passengersSignUp = async (req,res)=>{
                 verified: false,
                 // token: 'p' + generateID()
             }
-        }) 
+        })  
        
         res.json({msg:"User created successfully, wait until the admin verified you account"})
     }catch(error){

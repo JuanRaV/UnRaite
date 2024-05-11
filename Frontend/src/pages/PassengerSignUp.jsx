@@ -24,7 +24,7 @@ const SignUp = () => {
     const selectedFile = event.target.files[0];
     // Check if a file is actually selected
     if (!selectedFile) return;
-    console.log("hi",selectedFile)
+    console.log("hi", selectedFile)
     // Validate file type (optional)
     if (!selectedFile.type.match('image/*')) {
       setAlert({
@@ -34,7 +34,7 @@ const SignUp = () => {
       alertDisapears()
       return
     }
-    
+
     setIdFront(selectedFile);
   };
   const handleBackImageChange = (event) => {
@@ -51,7 +51,7 @@ const SignUp = () => {
       alertDisapears()
       return
     }
- 
+
     setIdBack(selectedFile);
   };
   const handleSubmit = async e => {
@@ -83,54 +83,44 @@ const SignUp = () => {
 
     console.log(idFront)
     const formData = new FormData()
-    formData.append("frontStudentCredential",idFront)
-    formData.append("backStudentCredential",idBack)
+    formData.append("frontStudentCredential", idFront)
+    formData.append("backStudentCredential", idBack)
     //name, email, phoneNumber, idFront, idBack, password, repeatPassword
-    formData.append("name",name)
-    formData.append("email",email)
-    formData.append("phoneNumber",phoneNumber)
-    formData.append("password",password)
-    
+    formData.append("name", name)
+    formData.append("email", email)
+    formData.append("phoneNumber", phoneNumber)
+    formData.append("password", password)
+
     // Connect with back and create user
-
-
-    const number = parseInt(phoneNumber)
-    //try {
-      /*const { data } =*/ await axiosClient.post('/api/users/signup/passenger',formData,{
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      } /*{
-        name,
-        email,
-        phoneNumber:number,
-        password,
-        frontStudentCredential: idFront,
-        backStudentCredential: idBack
-      }*/
-    ).then((response)=>{
+    await axiosClient.post('/api/users/signup/passenger', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }
+    ).then((response) => {
       console.log(response)
-    }).catch(er=>console.log(er))
-      //setAlert({
-      //  msg:data.msg,
-      //  error:false
-      //})
-      setName('')
-      setEmail('')
-      setPhoneNumber('')
-      setIdFront(null)
-      setIdBack(null)
-      setPassword('')
-      setRepeatPassword('')
-      setIdBack()
-      setIdFront()
-    /*} catch (error) {
-      console.error(error)
       setAlert({
-        msg: error.response.data.msg,
+        msg: response.data.msg,
+        error: false
+      });
+      alertDisapears()
+    }).catch(er => {
+      setAlert({
+        msg: er.response.data.msg,
         error: true
       })
-    }*/
+      alertDisapears()
+    })
+    setName('')
+    setEmail('')
+    setPhoneNumber('')
+    setIdFront(null)
+    setIdBack(null)
+    setPassword('')
+    setRepeatPassword('')
+    setIdBack()
+    setIdFront()
+
   }
 
 
@@ -195,7 +185,7 @@ const SignUp = () => {
           </label>
           <input
             id="idFront"
-         
+
             type="file" // Change type to "file" for image upload
             accept="image/*" // Restrict accepted file types (optional)
             placeholder="Select an image" // Placeholder text (optional)
