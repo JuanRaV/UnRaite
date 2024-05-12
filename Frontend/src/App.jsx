@@ -7,6 +7,8 @@ import LogIn from './pages/LogIn'
 import SignUp from './pages/SignUp'
 import PassengerSignUp from './pages/PassengerSignUp'
 import DriverSignUp from './pages/DriverSignUp'
+import DriverMain from './pages/DriverMain'
+import PassengerMain from './pages/PassengerMain'
 
 import { AuthProvider } from './context/AuthProvider'
 
@@ -27,7 +29,8 @@ const App = ()=> {
 
           {/* Private Area */}
           <Route path='/raites' element={<ProtectedRoute/>}>
-
+            <Route path='passenger' element={<PassengerMain/>}/>
+            <Route path='driver' element={<DriverMain/>}/>
           </Route>
         </Routes>
       </AuthProvider>

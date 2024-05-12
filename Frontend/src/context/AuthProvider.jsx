@@ -22,8 +22,12 @@ const AuthProvider = ({children}) => {
             }
             try {
                 const {data} = await axiosClient('/api/users/passenger-profile',config)
+                const {data2} = await axiosClient('/api/users/driver-profile',config)
                 // console.log(data)
-                setAuth(data)
+                if(data2)
+                    setAuth(data2)
+                else if(data)
+                    setAuth(data)
                 // console.log(auth)
             } catch (error) {
                 setAuth({})

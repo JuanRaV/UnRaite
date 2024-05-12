@@ -13,7 +13,7 @@ const login = async (req, res) => {
     //Check if that user exists:
     const admin = await prisma.admin.findFirst({ where: { adminUsername } })
 
-    console.log(admin)
+    // console.log(admin)
 
     //Check if its correct username
     if (!admin) {

@@ -10,7 +10,7 @@ const LogIn = () => {
     const [alert, setAlert] = useState({})
 
     const { setAuth } = useAuth()
-    // console.log(setAuth)
+    const navigate = useNavigate()
 
     const alertDisapears = () => {
         setTimeout(() => {
@@ -20,39 +20,47 @@ const LogIn = () => {
 
     const handleSubmit = async e => {
         e.preventDefault()
-        if([email,password].includes('')){
+        if ([email, password].includes('')) {
             setAlert({
-                msg:"All fields are required",
-                error:true
+                msg: "All fields are required",
+                error: true
             })
             alertDisapears()
             return
         }
         try {
-            const {data} = await axiosClient.post('/api/users/login',{
+            const { data } = await axiosClient.post('/api/users/login', {
                 email,
                 password
             })
             console.log(data)
             //Saving token on localStorage
-            localStorage.setItem('token',data.token)
-            setAuth(data)
-            Navigate('/raites')
+            if (data.passengerId) {
+                localStorage.setItem('token', data.token)
+                setAuth(data)
+                navigate('/raites/passenger')
+            } 
+            else{
+                localStorage.setItem('token', data.token)
+                setAuth(data)
+                navigate('/raites/driver')
+            }
+
         } catch (error) {
             setAlert({
-                msg:error.response.data.msg,
-                error:true
+                msg: error.response.data.msg,
+                error: true
             })
             alertDisapears()
         }
     }
 
-    const {msg} = alert
+    const { msg } = alert
 
     return (
         <>
             <h1 className="text-indigo-400 font-black text-6xl capitalize">LogIn & Get <span className="text-indigo-600">Raites</span></h1>
-            {msg && <Alert alert={alert}/>}
+            {msg && <Alert alert={alert} />}
             <form
                 className="my-10 bg-white shadow rounded-lg p-10"
                 onSubmit={handleSubmit}
