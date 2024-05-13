@@ -10,6 +10,7 @@ import DriverSignUp from './pages/DriverSignUp'
 import DriverMain from './pages/DriverMain'
 import PassengerMain from './pages/PassengerMain'
 import RaiteInfo from './pages/RaiteInfo'
+import CreateRaite from './pages/CreateRaite'
 
 import { AuthProvider } from './context/AuthProvider'
 import { RaitesProvider } from './context/RaitesProvider'
@@ -33,6 +34,7 @@ const App = () => {
             <Route path='/raites' element={<ProtectedRoute />}>
               <Route path='passenger' element={<PassengerMain />} />
               <Route path='driver' element={<DriverMain />} />
+              <Route path='driver/create-raite' element={<CreateRaite />} />
               <Route path='driver/:id' element={<RaiteInfo />} />
             </Route>
           </Routes>

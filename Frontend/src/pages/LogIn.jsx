@@ -33,7 +33,7 @@ const LogIn = () => {
                 email,
                 password
             })
-            console.log(data)
+            // console.log(data)
             //Saving token on localStorage
             if (data.passengerId) {
                 localStorage.setItem('token', data.token)

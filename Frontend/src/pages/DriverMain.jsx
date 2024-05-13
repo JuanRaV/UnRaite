@@ -9,7 +9,7 @@ const DriverMain = () => {
 
     const {msg} = alert
 
-    console.log(raites)
+    // console.log(raites)
     return (
         <>
             <h1 className="text-4xl font-black">Raites</h1>

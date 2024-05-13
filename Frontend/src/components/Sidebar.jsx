@@ -9,7 +9,7 @@ const Sidebar = () => {
             Welcome back, <span className="text-gray-500">{auth.name}</span>
         </p>
         <Link
-            to='create-raite'
+            to='driver/create-raite'
             className="bg-indigo-600 w-full p-3 text-white uppercase font-bold block mt-5 text-center rounded-lg hover:bg-indigo-800"
         >
             Create Raite
