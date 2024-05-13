@@ -5,6 +5,7 @@ import adminRoutes from './routes/adminRoutes.js'
 import userRoutes from './routes/userRoutes.js'
 import driverRoutes from './routes/driverRoutes.js'
 import passengerRoutes from './routes/passengerRoutes.js'
+import townRoutes from './routes/townRoutes.js'
 
 
 const app = express();
@@ -33,6 +34,7 @@ app.use('/',adminRoutes)
 app.use('/api/users', userRoutes)
 app.use("/driver", driverRoutes)
 app.use('/passenger', passengerRoutes)
+app.use('/towns', townRoutes)
 
 const port = 3000;
 

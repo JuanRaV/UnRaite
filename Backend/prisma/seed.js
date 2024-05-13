@@ -414,7 +414,7 @@ async function main() {
   await prisma.townToGdl.upsert({ where: { id: 122 }, update:{}, create:{ townName: "Zapotlán del Rey", price: 138 } })
   await prisma.townToGdl.upsert({ where: { id: 123 }, update:{}, create:{ townName: "Zapotlanejo", price: 85 } })
   await prisma.townToGdl.upsert({ where: { id: 124 }, update:{}, create:{ townName: "San Ignacio Cerro Gordo", price: 257 } })
-
+  await prisma.townToGdl.upsert({ where: { id: 125 }, update:{}, create:{ townName: "Guadalajara", price: 0 } })
 
 
 
