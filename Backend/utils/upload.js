@@ -2,7 +2,7 @@ import multer from 'multer';
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    console.log("upload:",file)
+    console.log("upload des req.body:",req.body)
     if (!file.fieldname) {
       // Ignore files without fieldname attribute
       return;
@@ -19,6 +19,7 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
 
     console.log("upload filename:",file)
+    console.log("upload filename req.body:",req.body)
     if (file.fieldname == 'frontStudentCredential' || file.fieldname === 'backStudentCredential' ) {
       console.log("upload pN: ",req.body.phoneNumber)
       cb(null, `${req.body.phoneNumber}.${file.mimetype.split('/')[1]}`);
