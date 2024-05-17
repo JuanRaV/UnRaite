@@ -13,14 +13,15 @@ const RaiteForm = () => {
     const [startHour, setStartHour] = useState("")
     const [date, setDate] = useState("")
     const [capacity, setCapacity] = useState("")
-    const [price, setPrice] = useState("")
+    const [price, setPrice] = useState(0)
     const [towns, setTowns] = useState([])
     const [startingPoint, setStartingPoint] = useState("")
     const [arrivalPoint, setArrivalPoint] = useState("")
     const selectedOption = ''
 
     const { id } = useParams()
-
+    console.log(start)
+    // console.log(price)
     const { showAlert, alert, submitRaite, raite } = useRaites()
     useEffect(() => {
         const fetchTowns = async () => {
@@ -31,8 +32,10 @@ const RaiteForm = () => {
                 console.log(error)
             }
         }
+        
         fetchTowns()
     }, [])
+
     // console.log(towns)
     // towns.map(town => console.log(town.townName))
 
@@ -62,6 +65,11 @@ const RaiteForm = () => {
         console.log('All good')
     }
 
+
+    // console.log(towns)
+    const matchingTown=towns.find(townActual => townActual.townName == start)
+    
+    
     const { msg } = alert
     return (
         <form
@@ -69,54 +77,84 @@ const RaiteForm = () => {
             onSubmit={handleSubmit}
         >
             {msg && <Alert alert={alert} />}
-            <div className="">
-                <h2 className="font-bold text-sm text-center">Elije tu Opcion de Viaje a GDL</h2>
-                <label>
+            <div className=" text-center">
+                <h2 className="font-bold text-xl uppercase text-center mb-5">Are you  going or coming to GDL?</h2>
+                <label className="mx-5 text-indigo-500 font-bold text-xl">
                     <input
                         type="radio"
                         name="travelOption"
+                        className=""
                         value="voy"
                         onChange={e => setOption(e.target.value)}
                     />
-                    Voy
+                    Going
                 </label>
 
-                <label>
+                <label className="text-indigo-500 font-bold text-xl">
                     <input
                         type="radio"
                         name="travelOption"
+                        className=""
                         value="vengo"
                         onChange={e => setOption(e.target.value)}
                     />
-                    Vengo
+                    Coming
                 </label>
             </div>
-            {option == "voy" ? (
-                <>
-                    <p>Select Your Origin</p>
-                    <select onChange={e=>setStart(e.target.value)}>
-                        {towns.map(town => (
-                            <option key={town.id} value={town.id} >
-                                {town.townName}
-                            </option>
-                        ))}
-                    </select>
-                </>
 
-            ) : (
-                <>
-                    <p>Select your Destination</p>
-                    <select onChange={e=>console.log(e.target)}>
-                        {towns.map(town => (
-                            <option key={town.id} value={town.id} >
-                                {town.townName}
-                            </option>
-                        ))}
-                    </select>
-                </>
+            <div className="flex justify-between mt-5">
+                {option == "voy" ? (
+                    <>
+                        <div>
+                            <p className="text-gray-700 uppercase font-bold text-sm mt-5 text-center">Select Your Origin</p>
+                            {/* {setStart(e.target.value.townName);setPrice(e.target.value.price)} */}
+                            <select onChange={ (e) => { 
+                                    setStart(e.target.value);
+                                    console.log(start)
+                                    // setPrice(0)
+                                    const matchingTown= towns.find(townActual => townActual.townName == start)
+                                    // setPrice(matchingTown.price)
+                                    console.log(matchingTown)
+                                }}
+                                className="mb-5 border p-1 rounded-lg">
+                                {towns.map(town => (
 
-            )}
-            
+                                    <option key={town.id} value={town.name}>
+                                        {town.townName}
+                                    </option>
+
+                                ))}
+                            </select>
+                        </div>
+                    </>
+
+                ) : (
+                    <>
+                        <div>
+                            <p className="text-gray-700 uppercase font-bold text-sm mt-5 text-center">Select your Destination</p>
+                            <select onChange={e => {
+                                setStart(e.target.value);
+                                const matchingTown=towns.find(townActual => townActual.townName == start)
+                                // setPrice(matchingTown.price)
+                                console.log(matchingTown)
+
+                            }} className="mb-5 border p-1 rounded-lg">
+                                {towns.map(town => (
+                                    <option key={town.id} value={town.townName}>
+                                        {town.townName}
+                                    </option>
+                                ))}
+                            </select>
+
+                        </div>
+                    </>
+                )}
+                <div>
+                    <p className="text-gray-700 uppercase font-bold text-sm mt-5">Price</p>
+                    <p>{price}</p>
+                </div>
+            </div>
+
             <div className="mb-5">
                 <label htmlFor="capacity" className="text-gray-700 uppercase font-bold text-sm">Capacity</label>
                 <input
