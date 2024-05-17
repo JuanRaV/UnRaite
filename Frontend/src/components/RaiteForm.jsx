@@ -13,6 +13,7 @@ const RaiteForm = () => {
     const [startHour, setStartHour] = useState("")
     const [date, setDate] = useState("")
     const [capacity, setCapacity] = useState("")
+    const [completed, setCompleted] = useState(false)
     const [price, setPrice] = useState(0)
     const [towns, setTowns] = useState([])
     const [startingPoint, setStartingPoint] = useState("")
@@ -35,6 +36,21 @@ const RaiteForm = () => {
         
         fetchTowns()
     }, [])
+
+    useEffect(()=>{
+        if(id){
+            setIdUpdate(raite.id)
+            setStart(raite.start)
+            setDestination(raite.destination)
+            setDate(raite.date.split('T')[0])
+            setPrice(raite?.price)
+            setCapacity(raite.capacity)
+            setCompleted(raite.completed)
+            setStartHour(raite.startHour)
+            setStartingPoint(raite.startingPoint)
+            setArrivalPoint(raite.arrivalPoint)
+        }
+    },[id])
 
     if(start!=="Guadalajara"){
         useEffect(()=>{
@@ -89,7 +105,7 @@ const RaiteForm = () => {
         // Pass data to the provider
         const intCapacity = parseInt(capacity)
         const intPrice = parseInt(price)
-        await submitRaite({startHour,date, start, startingPoint, destination, arrivalPoint, capacity:intCapacity,price:intPrice})
+        await submitRaite({id:idUpdate,startHour,date, start, startingPoint, destination, arrivalPoint, capacity:intCapacity,price:intPrice})
         setIdUpdate(null)
         setStartHour("")
         setDate("")

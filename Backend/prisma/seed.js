@@ -167,12 +167,12 @@ async function main() {
     update: {},
     create: {
 
-      startHour: "2024-04-06T10:45:00.000Z",
+      startHour: "12:30",
       start: "San Miguel el Alto",
       date: "2024-04-06T10:45:00.000Z",
-      startingPoint: "",
+      startingPoint: "Plaza de Toros",
       destination: "Guadalajara",
-      arrivalPoint: "",
+      arrivalPoint: "Midtown",
       capacity: 3,
       price: 23,
       driverId: driver1.driverId
@@ -185,12 +185,12 @@ async function main() {
     update: {},
     create: {
 
-      startHour: "2024-04-06T10:45:00.000Z",
+      startHour: "17:45",
       start: "Arandas",
-      startingPoint: "",
+      startingPoint: "Bramido",
       date: "05-04-2024",
       destination: "Guadalajara",
-      arrivalPoint: "",
+      arrivalPoint: "RIU",
       capacity: 2,
       price: 60,
       driverId: driver2.driverId
@@ -203,12 +203,12 @@ async function main() {
     update: {},
     create: {
 
-      startHour: "2024-04-06T10:45:00.000Z",
+      startHour: "11:15",
       start: "Guadalajara",
       date: "05-04-2024",
-      startingPoint: "",
+      startingPoint: "La Cima",
       destination: "Tequila",
-      arrivalPoint: "",
+      arrivalPoint: "Cantaritos el Guero",
       capacity: 4,
       price: 160,
       driverId: driver1.driverId
@@ -221,12 +221,12 @@ async function main() {
     update: {},
     create: {
 
-      startHour: "2024-04-06T10:45:00.000Z",
+      startHour: "15:30",
       start: "Guadalajara",
       date: "05-04-2024",
-      startingPoint: "",
+      startingPoint: "La Gran Plaza",
       destination: "San Sebastian",
-      arrivalPoint: "",
+      arrivalPoint: "Plaza",
       capacity: 1,
       price: 110,
       driverId: driver2.driverId

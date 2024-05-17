@@ -108,7 +108,7 @@ const RaitesProvider = ({children}) =>{
             })
             setTimeout(()=>{
                 setAlert({})
-                navigate('/raites/driver')
+                navigate('/driver')
             },3000)
         } catch (error) {
             console.log(error)
@@ -139,7 +139,7 @@ const RaitesProvider = ({children}) =>{
             })
             setTimeout(()=>{
                 setAlert({})
-                setFormRaiteModal(false)
+                navigate('/driver')
             },3000)
 
         } catch (error) {
@@ -147,7 +147,7 @@ const RaitesProvider = ({children}) =>{
         }
     }
     const submitRaite = async raite =>{
-        if(raite.idUpdate)
+        if(raite.id)
             await editRaite(raite)
         else
             await createRaite(raite)
@@ -156,6 +156,34 @@ const RaitesProvider = ({children}) =>{
     const handleModalEditRaite = raite =>{
         setRaite(raite)
         setFormRaiteModal(true)
+    }
+
+    const completeRaite = async id =>{
+        try {
+            const token = localStorage.getItem("token")
+            if(!token) return
+            const config = {
+                headers:{
+                    "Content-Type":"application/json",
+                    Authorization:`Bearer ${token}`
+                }
+            }
+
+            await axiosClient.put(`/driver/complete-raite/${id}`,{},config)
+            // const updatedRaites = raites.map(raiteState => raiteState.id === data.id ? data : raiteState)
+            // setRaites(updatedRaites)
+            // setRaite({})
+            setAlert({
+                msg:'Raite Completed Successfully',
+                error: false
+            })
+            setTimeout(()=>{
+                setAlert({})
+                navigate('/driver')
+            },3000)
+        } catch (error) {
+            console.log(error.response)
+        }
     }
 
     return(
@@ -170,7 +198,8 @@ const RaitesProvider = ({children}) =>{
                 formRaiteModal,
                 handleRaiteModal,
                 handleModalEditRaite,
-                submitRaite
+                submitRaite,
+                completeRaite
 
             }}
         >

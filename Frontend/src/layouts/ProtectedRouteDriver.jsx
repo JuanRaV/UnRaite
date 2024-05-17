@@ -4,7 +4,7 @@ import HeaderPassenger from '../components/HeaderPassenger'
 import HeaderDriver from '../components/HeaderDriver'
 import Sidebar from '../components/Sidebar'
 
-const ProtectedRoute = () => {
+const ProtectedRouteDriver = () => {
     const { auth, loading } = useAuth()
     // console.log(auth)
     if (loading) return 'Loading...'
@@ -12,7 +12,7 @@ const ProtectedRoute = () => {
     return (
         <>
             
-            {auth.driverId && (
+            {auth.driverId? (
                 <div className="bg-gray-100">
                     <HeaderDriver /> 
                     <div className="md:flex md:min-h-screen">
@@ -22,23 +22,13 @@ const ProtectedRoute = () => {
                         </main>
                     </div>
                 </div>
+            ):(
+                 <Navigate to="/" />
             )}
-            {auth.passengerId && (
-                <div className="bg-gray-100">
-                    <HeaderPassenger />
-                    <div className="md:flex md:min-h-screen">
-                        <main className="flex-1 p-10">
-                            <Outlet />
-                        </main>
-                    </div>
-                </div>
-            )}
-
-
-            {!auth.passengerId && !auth.driverId && <Navigate to="/" />}
+           
         </>
 
     )
 }
 
-export default ProtectedRoute
+export default ProtectedRouteDriver

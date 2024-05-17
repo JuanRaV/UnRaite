@@ -25,7 +25,7 @@ const RaitePreview = ({ raite }) => {
                 }
             </div>
             <Link
-                to={`${id}`}
+                to={`raite/${id}`}
                 className="text-white uppercase text-sm font-bold bg-gray-600 rounded-lg p-1 hover:bg-gray-800"
             >
             See Raite</Link>

@@ -3,12 +3,13 @@ import axiosClient from "../config/axiosClient"
 
 const AuthContext = createContext()
 
-const AuthProvider = ({children}) => {
+const DriverAuthProvider = ({children}) => {
     const [auth, setAuth] = useState({})
     const [loading, setLoading] = useState(true)
 
     useEffect(()=>{
         const authUser = async() =>{
+            setAuth({})
             const token = localStorage.getItem('token')
             if(!token){
                 setLoading(false)
@@ -21,15 +22,11 @@ const AuthProvider = ({children}) => {
                 }
             }
             try {
-                const {data} = await axiosClient('/api/users/passenger-profile',config)
-                const {data2} = await axiosClient('/api/users/driver-profile',config)
-                // console.log(data)
-                if(data2)
-                    setAuth(data2)
-                else if(data)
-                    setAuth(data)
+                const {data} = await axiosClient('/api/users/driver-profile',config)
+                setAuth(data)
                 // console.log(auth)
             } catch (error) {
+                console.log(error)
                 setAuth({})
             }finally{
                 setLoading(false)
@@ -55,5 +52,5 @@ const AuthProvider = ({children}) => {
         </AuthContext.Provider>
     )
 }
-export {AuthProvider}
+export {DriverAuthProvider}
 export default AuthContext
