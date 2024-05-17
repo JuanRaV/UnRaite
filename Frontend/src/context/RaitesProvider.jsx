@@ -101,9 +101,15 @@ const RaitesProvider = ({children}) =>{
             }
 
             const {data} = await axiosClient.post('/driver/create-raite', raite,config)
-
-            setAlert({})
-            setFormRaiteModal(false)
+            setRaite([...raites,data])
+            setAlert({
+                msg:"Raite Created Successfully",
+                error:false
+            })
+            setTimeout(()=>{
+                setAlert({})
+                navigate('/raites/driver')
+            },3000)
         } catch (error) {
             console.log(error)
         }
@@ -141,8 +147,8 @@ const RaitesProvider = ({children}) =>{
         }
     }
     const submitRaite = async raite =>{
-        if(raite?.id)
-            editRaite(raite)
+        if(raite.idUpdate)
+            await editRaite(raite)
         else
             await createRaite(raite)
     }

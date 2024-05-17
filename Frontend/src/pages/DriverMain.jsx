@@ -6,7 +6,9 @@ import RaitePreview from "../components/RaitePreview"
 const DriverMain = () => {
 
     const {raites, alert} = useRaites()
+    useEffect(()=>{
 
+    },[raites])
     const {msg} = alert
 
     // console.log(raites)
