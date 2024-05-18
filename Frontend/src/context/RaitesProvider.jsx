@@ -168,7 +168,8 @@ const RaitesProvider = ({children}) =>{
                     Authorization:`Bearer ${token}`
                 }
             }
-
+            const confirmReport = window.confirm('Are you sure you want to finish this raite?');
+            if (!confirmReport) return; // Exit if user cancels
             await axiosClient.put(`/driver/complete-raite/${id}`,{},config)
             // const updatedRaites = raites.map(raiteState => raiteState.id === data.id ? data : raiteState)
             // setRaites(updatedRaites)
@@ -217,16 +218,28 @@ const RaitesProvider = ({children}) =>{
         }
         const confirmReport = window.confirm('Are you sure you want to report this passenger?');
         if (!confirmReport) return; // Exit if user cancels
-        await axiosClient.post(`/driver/strike-passenger/${passengerId}/${raiteId}`,{},config)
+        try {
+            await axiosClient.post(`/driver/strike-passenger/${passengerId}/${raiteId}`,{},config)
 
-        setAlert({
-            msg:'Passenger Reported Successfully',
-            error: true
-        })
-        setTimeout(()=>{
-            setAlert({})
-            navigate('/driver')
-        },3000)
+            setAlert({
+                msg:'Passenger Reported Successfully',
+                error: false
+            })
+            setTimeout(()=>{
+                setAlert({})
+                navigate('/driver')
+            },3000)
+        } catch (error) {
+            setAlert({
+                msg:error.response.data.msg,
+                error: true
+            })
+            setTimeout(()=>{
+                setAlert({})
+            },3000)
+            console.log(error.response.data.msg)
+        }
+
     }
     return(
         <RaitesContext.Provider

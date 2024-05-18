@@ -2,6 +2,7 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import bcrypt from 'bcrypt'
 import generateID from "../helpers/generateID.js";
 import generateJWT from "../helpers/generateJWT.js";
+import { forgotPasswordEmail } from "../helpers/email.js";
 
 const prisma = new PrismaClient()
 
@@ -165,10 +166,8 @@ const passengerLogin = async (req, res) => {
 const driverLogin = async (req, res) => {
     const { email } = req.body
 
-
     const driver = await prisma.driver.findFirst({ where: { email } })
     const driverStrike = driver?.strike
-
 
     if (!driver) {
         const error = new Error("User not found")
@@ -230,7 +229,11 @@ const forgotPassword = async (req, res) => {
                 data: { token: driver.token }
             })
             //TODO SEND EMAIL
-            //Send email
+            forgotPassword({
+                email,
+                name:user.name,
+                token:user.token
+            })
 
             res.json({ msg: "We've sent an email with further instructions" })
         }

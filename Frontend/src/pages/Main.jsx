@@ -13,6 +13,7 @@ const Main = () => {
                         </svg>
 
                         <h2 className="text-indigo-400 font-black text-3xl">I give <span className="text-indigo-600">Raites</span></h2>
+                        <p className="font-bold text-gray-500 text-xl">Driver</p>
                     </div>
                 </Link>
 
@@ -23,6 +24,7 @@ const Main = () => {
                         </svg>
 
                         <h2 className="text-indigo-400 font-black text-3xl">I want <span className="text-indigo-600">Raites</span></h2>
+                        <p className="font-bold text-gray-500 text-xl">Passenger</p>
                     </div>
                 </Link>
 

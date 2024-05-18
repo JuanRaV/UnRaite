@@ -15,6 +15,7 @@ import PassengerMain from './pages/PassengerMain'
 import RaiteInfo from './pages/RaiteInfo'
 import CreateRaite from './pages/CreateRaite'
 import EditRaite from './pages/EditRaite'
+import DriverForgotPassword from './pages/DriverForgotPassword'
 
 import { DriverAuthProvider } from './context/DriverAuthProvider'
 import { PassengerAuthProvider } from './context/PassengerAuthProvider'
@@ -35,11 +36,11 @@ const App = () => {
                 <Route path='login/driver' element={<DriverLogIn />} />
                 <Route path='signUp/passenger' element={<PassengerSignUp />} />
                 <Route path='signUp/driver' element={<DriverSignUp />} />
+                <Route path='forgotPassword/driver' element={<DriverForgotPassword/>}/>
               </Route>
 
               {/* Private Area for DRIVERS*/}
               <Route path='/driver' element={<ProtectedRouteDriver />}>
-                {/* <Route path='passenger' element={<PassengerMain />} /> */}
                 <Route index element={<DriverMain />} />
                 <Route path='create-raite' element={<CreateRaite />} />
                 <Route path='raite/:id' element={<RaiteInfo />} />
@@ -47,6 +48,7 @@ const App = () => {
               </Route>
 
               {/* Private area for PASSENGERS */}
+
             </Routes>
           </RaitesProvider>
         </PassengerAuthProvider>
