@@ -1,4 +1,4 @@
-import useRaites from "../hooks/useRaites"
+import useRaites from "../hooks/useRaitesDriver"
 
 const PassengerInfo = ({ passenger, raite }) => {
   const { name, email, phoneNumber, passengerId } = passenger

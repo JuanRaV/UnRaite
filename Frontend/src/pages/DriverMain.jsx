@@ -1,14 +1,11 @@
-import { useEffect } from "react"
-import useRaites from "../hooks/useRaites"
+import useRaites from "../hooks/useRaitesDriver"
 import Alert from "../components/Alert"
 import RaitePreview from "../components/RaitePreview"
 
 const DriverMain = () => {
 
     const {raites, alert} = useRaites()
-    useEffect(()=>{
 
-    },[raites])
     const {msg} = alert
 
     // console.log(raites)

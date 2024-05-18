@@ -1,8 +1,8 @@
 import { useEffect } from "react"
 import { useParams, Link } from "react-router-dom"
 import { formateDate } from "../helpers/formateDate"
-import useAuth from "../hooks/useAuth"
-import useRaites from "../hooks/useRaites"
+import useAuth from "../hooks/useAuthDriver"
+import useRaites from "../hooks/useRaitesDriver"
 import PassengerInfo from "../components/PassengerInfo"
 import Alert from "../components/Alert"
 

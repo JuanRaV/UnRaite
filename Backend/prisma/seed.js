@@ -169,7 +169,7 @@ async function main() {
 
       startHour: "12:30",
       start: "San Miguel el Alto",
-      date: "2024-04-06T10:45:00.000Z",
+      date: "21-08-2024",
       startingPoint: "Plaza de Toros",
       destination: "Guadalajara",
       arrivalPoint: "Midtown",

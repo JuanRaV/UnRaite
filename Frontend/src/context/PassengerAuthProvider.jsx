@@ -23,7 +23,9 @@ const PassengerAuthProvider = ({children}) => {
             }
             try {
                 const {data} = await axiosClient('/api/users/passenger-profile',config)
-                setAuth(data)
+                console.log(data)
+                if(data)
+                    setAuth(data)
                 // console.log(auth)
             } catch (error) {
                 console.log(error)

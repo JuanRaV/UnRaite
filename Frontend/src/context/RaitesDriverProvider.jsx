@@ -1,12 +1,12 @@
 import { useState, useEffect, createContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosClient from "../config/axiosClient";
-import useAuth from "../hooks/useAuth";
+import useAuth from "../hooks/useAuthDriver";
 import axios from "axios";
 
 const RaitesContext = createContext()
 
-const RaitesProvider = ({children}) =>{
+const RaitesDriverProvider = ({children}) =>{
     const [raites, setRaites] = useState([])
     const [raite, setRaite] = useState({})
     const [alert, setAlert] = useState({})
@@ -25,7 +25,7 @@ const RaitesProvider = ({children}) =>{
             setAlert({})
         },3000)
     }
-
+    
     useEffect(()=>{
         const getRaites = async() =>{
             try {
@@ -274,5 +274,5 @@ const RaitesProvider = ({children}) =>{
     )
 }
 
-export {RaitesProvider}
+export {RaitesDriverProvider}
 export default RaitesContext
