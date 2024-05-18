@@ -100,7 +100,7 @@ const PassengerLogIn = () => {
                     Don't Have an Account? Sign Up</Link>
                 <Link
                     className="block text-center my-3 text-slate-500 uppercase text-sm"
-                    to="/forgot-password"
+                    to="/forgotPassword/passenger"
                 >
                     Forgot my Password</Link>
             </nav>

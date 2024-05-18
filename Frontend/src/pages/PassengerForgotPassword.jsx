@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 import axiosClient from "../config/axiosClient"
 import Alert from "../components/Alert"
 
-const DriverForgotPassword = () => {
+const PassengerForgotPassword = () => {
   const [email, setEmail] = useState("")
   const [alert, setAlert] = useState({})
 
@@ -25,7 +25,7 @@ const DriverForgotPassword = () => {
     }
 
     try {
-      const {data} = await axiosClient.post('/api/users/forgot-password/driver',{email})
+      const {data} = await axiosClient.post('/api/users/forgot-password/passenger',{email})
       setAlert({
         msg:data.msg,
         error:false
@@ -79,7 +79,7 @@ const DriverForgotPassword = () => {
           Already Have an Account? Sign In</Link>
         <Link
           className="block text-center my-3 text-slate-500 uppercase text-sm"
-          to="/signUp/driver"
+          to="/signUp/passenger"
         >
           Don't Have an Account? Sign Up</Link>
       </nav>
@@ -87,4 +87,4 @@ const DriverForgotPassword = () => {
   )
 }
 
-export default DriverForgotPassword
+export default PassengerForgotPassword

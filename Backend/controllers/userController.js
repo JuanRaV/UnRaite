@@ -2,7 +2,7 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import bcrypt from 'bcrypt'
 import generateID from "../helpers/generateID.js";
 import generateJWT from "../helpers/generateJWT.js";
-import { forgotPasswordEmail } from "../helpers/email.js";
+import { passengerForgotPasswordEmail, driverForgotPasswordEmail } from "../helpers/email.js";
 
 const prisma = new PrismaClient()
 
@@ -201,102 +201,147 @@ const driverLogin = async (req, res) => {
     }
 
 }
-
-const forgotPassword = async (req, res) => {
+const PassengerForgotPassword = async (req, res) => {
     const { email } = req.body
-    //Check if that user exists:
     const passenger = await prisma.passenger.findFirst({ where: { email } })
-    const driver = await prisma.driver.findFirst({ where: { email } })
-
-    const user = passenger || driver
-    console.log(user)
 
     const id = generateID()
 
-    if (!user) {
+
+    if (!passenger) {
         const error = new Error("User not found")
         return res.status(404).json({ msg: error.message })
     }
     try {
-        if (driver) {
-            driver.token = 'd' + id
-            await prisma.driver.update({
-                where: { email },
-                data: { token: driver.token }
-            })
-            await prisma.passenger.update({
-                where: { email },
-                data: { token: driver.token }
-            })
-            //TODO SEND EMAIL
-            forgotPassword({
-                email,
-                name:user.name,
-                token:user.token
-            })
 
-            res.json({ msg: "We've sent an email with further instructions" })
-        }
-        else if (passenger) {
-            passenger.token = 'p' + id
-            await prisma.passenger.update({
-                where: { email },
-                data: { token: passenger.token }
-            })
-            //TODO SEND EMAIL
-            //Send email
+        passenger.token = 'p' + id
+        await prisma.passenger.update({
+            where: { email },
+            data: { token: passenger.token }
+        })
+        //TODO SEND EMAIL
+        //Send email
+        passengerForgotPasswordEmail({
+            email,
+            name: passenger.name,
+            token: passenger.token
+        })
+        res.json({ msg: "We've sent an email with further instructions" })
 
-            res.json({ msg: "We've sent an email with further instructions" })
-        }
     } catch (error) {
         console.log(error)
     }
 }
+const DriverForgotPassword = async (req, res) => {
+    const { email } = req.body
+    //Check if that user exists:
 
-const checkToken = async (req, res) => {
+    const driver = await prisma.driver.findFirst({ where: { email } })
+
+
+
+    const id = generateID()
+
+    if (!driver) {
+        const error = new Error("User not found")
+        return res.status(404).json({ msg: error.message })
+    }
+    try {
+
+        driver.token = 'd' + id
+        await prisma.driver.update({
+            where: { email },
+            data: { token: driver.token }
+        })
+        await prisma.passenger.update({
+            where: { email },
+            data: { token: driver.token }
+        })
+        //TODO SEND EMAIL
+        driverForgotPasswordEmail({
+            email,
+            name: driver.name,
+            token: driver.token
+        })
+
+        res.json({ msg: "We've sent an email with further instructions" })
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+const passengerCheckToken = async (req, res) => {
     const { token } = req.params
-    const passenger = await prisma.passenger.findFirst({ where: { token } })
-    const driver = await prisma.driver.findFirst({ where: { token } })
 
-    const user = passenger || driver
-    if (user)
+    const passenger = await prisma.passenger.findFirst({ where: { token } })
+
+    if (passenger)
         res.json({ msg: "Valid token and user exists" })
     else {
         const error = new Error("User not found")
         return res.status(404).json({ msg: error.message })
     }
-    console.log("Hola ADIOS")
 }
+const driverCheckToken = async (req, res) => {
+    const { token } = req.params
 
-const newPassword = async (req, res) => {
+    const driver = await prisma.driver.findFirst({ where: { token } })
+
+    if (driver)
+        res.json({ msg: "Valid token and user exists" })
+    else {
+        const error = new Error("User not found")
+        return res.status(404).json({ msg: error.message })
+    }
+}
+const passengerNewPassword = async (req, res) => {
     const { token } = req.params
     const { password } = req.body
 
     const passenger = await prisma.passenger.findFirst({ where: { token } })
-    const driver = await prisma.driver.findFirst({ where: { token } })
-    // const passenger = await prisma.passenger.findFirst({ where: { OR: [{ token }, { email: token }] } });
-    // const driver = await prisma.driver.findFirst({ where: { OR: [{ token }, { email: token }] } });
+
     const hashedPassword = await bcrypt.hash(password, 10);
-    if (driver) {
+    if (passenger) {
+        // passenger.password = password
+        // passenger.token = ""
+        if(password.length < 6){
+            const error = new Error("Password to Short")
+            return res.status(404).json({ msg: error.message })
+        }
         try {
-            await prisma.driver.update({
-                where: { email: driver.email, token },
-                data: { password: hashedPassword, token: "" }
-            })
             await prisma.passenger.update({
-                where: { email: driver.email, token },
+                where: { email: passenger.email, token },
                 data: { password: hashedPassword, token: "" }
             })
             res.json({ msg: "Password changed correctly" })
         } catch (error) {
             console.log(error)
         }
-    } else if (passenger) {
-        // passenger.password = password
-        // passenger.token = ""
+    } else {
+        const error = new Error("Invalid Token")
+        return res.status(404).json({ msg: error.message })
+    }
+}
+const driverNewPassword = async (req, res) => {
+    const { token } = req.params
+    const { password } = req.body
+
+    const driver = await prisma.driver.findFirst({ where: { token } })
+    // const passenger = await prisma.passenger.findFirst({ where: { OR: [{ token }, { email: token }] } });
+    // const driver = await prisma.driver.findFirst({ where: { OR: [{ token }, { email: token }] } });
+    const hashedPassword = await bcrypt.hash(password, 10);
+    if (driver) {
         try {
+            if(password.length < 6){
+                const error = new Error("Password to Short")
+                return res.status(404).json({ msg: error.message })
+            }
+            await prisma.driver.update({
+                where: { email: driver.email, token },
+                data: { password: hashedPassword, token: "" }
+            })
             await prisma.passenger.update({
-                where: { email: passenger.email, token },
+                where: { email: driver.email, token },
                 data: { password: hashedPassword, token: "" }
             })
             res.json({ msg: "Password changed correctly" })
@@ -325,9 +370,12 @@ export {
     registerUser,
     passengerLogin,
     driverLogin,
-    forgotPassword,
-    checkToken,
-    newPassword,
+    PassengerForgotPassword,
+    DriverForgotPassword,
+    passengerCheckToken,
+    driverCheckToken,
+    passengerNewPassword,
+    driverNewPassword,
     driverProfile,
     passengerProfile
 }
