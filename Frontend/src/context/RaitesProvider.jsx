@@ -185,7 +185,49 @@ const RaitesProvider = ({children}) =>{
             console.log(error.response)
         }
     }
+    const deleteRaite = async id =>{
+        const token = localStorage.getItem("token")
+        if(!token) return
+        const config = {
+            headers:{
+                "Content-Type":"application/json",
+                Authorization:`Bearer ${token}`
+            }
+        }
+        await axiosClient.delete(`/driver/delete-raite/${id}`,config)
 
+        setAlert({
+            msg:'Raite Deleted Successfully',
+            error: false
+        })
+        setTimeout(()=>{
+            setAlert({})
+            navigate('/driver')
+        },3000)
+    }
+
+    const reportPassenger = async (passengerId, raiteId)=>{
+        const token = localStorage.getItem("token")
+        if(!token) return
+        const config = {
+            headers:{
+                "Content-Type":"application/json",
+                Authorization:`Bearer ${token}`
+            }
+        }
+        const confirmReport = window.confirm('Are you sure you want to report this passenger?');
+        if (!confirmReport) return; // Exit if user cancels
+        await axiosClient.post(`/driver/strike-passenger/${passengerId}/${raiteId}`,{},config)
+
+        setAlert({
+            msg:'Passenger Reported Successfully',
+            error: true
+        })
+        setTimeout(()=>{
+            setAlert({})
+            navigate('/driver')
+        },3000)
+    }
     return(
         <RaitesContext.Provider
             value={{
@@ -199,7 +241,9 @@ const RaitesProvider = ({children}) =>{
                 handleRaiteModal,
                 handleModalEditRaite,
                 submitRaite,
-                completeRaite
+                completeRaite,
+                deleteRaite,
+                reportPassenger
 
             }}
         >

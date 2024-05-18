@@ -8,7 +8,7 @@ import Alert from "../components/Alert"
 
 const RaiteInfo = () => {
     const { id } = useParams()
-    const { raite, getRaite, completeRaite, alert } = useRaites()
+    const { raite, getRaite, completeRaite,deleteRaite, alert } = useRaites()
 
     useEffect(() => {
         getRaite(id)
@@ -54,6 +54,7 @@ const RaiteInfo = () => {
                         <PassengerInfo
                             key={passenger.passengerId}
                             passenger={passenger.passenger}
+                            raite={raite}
                         />
                     )) : <p className="font-bold text-3xl text-center bg-gray-100 py-3">No Passengers for this Raite</p>
                 }
@@ -80,7 +81,7 @@ const RaiteInfo = () => {
 
             <button
                 className="bg-red-600 px-4 py-3 text-white uppercase font-bold text-sm rounded-lg hover:text-black cursor-pointer"
-            // onClick={()=>handleModalDeleteRaite(raite)}
+                onClick={()=>deleteRaite(raite.id)}
             >
                 Cancel Raite
             </button>
