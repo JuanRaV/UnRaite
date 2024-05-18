@@ -12,7 +12,13 @@ const createRaite = async (req, res) => {
     return res.status(400).json({ msg: 'All fields are required' });
 
   try {
+    const raiteInProgress = await prisma.raite.findFirst({
+      where:{completed:false}
+    })
 
+    if(raiteInProgress){
+      return res.status(404).json({ msg: "You Can't Create a Raite If Other Is In Porgress" });
+    }
     const raite = await prisma.raite.create({
       data: {
         startHour,
@@ -226,10 +232,8 @@ const strike = async (req, res) => {
     console.log(error)
     res.status(500).json({ msg: 'Internal server error' });
   }
-
-
-
 }
+
 
 export {
   createRaite,

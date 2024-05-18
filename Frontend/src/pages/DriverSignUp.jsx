@@ -311,7 +311,7 @@ const SignUp = () => {
           Already Have an Account? Sign In</Link>
         <Link
           className="block text-center my-3 text-slate-500 uppercase text-sm"
-          to="/forgot-password"
+          to="/forgotPassword/driver"
         >
           Forgot my Password</Link>
       </nav>

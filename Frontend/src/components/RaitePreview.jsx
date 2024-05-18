@@ -13,8 +13,11 @@ const RaitePreview = ({ raite }) => {
                 <p className=" font-bold">
                     To: <span className="font-normal">{destination}</span>
                 </p>
+
+            </div>
+            <div className="flex justify-center space-x-2">
                 {completed == true ? (
-                    <p className="p-1 text-xs rounded-lg text-white bg-green-500 font-bold uppercase">
+                    <p className="p-1 text-xs rounded-lg text-white bg-green-500 uppercase font-bold ">
                         Completed
                     </p>
                 ) : (
@@ -23,12 +26,13 @@ const RaitePreview = ({ raite }) => {
                     </p>
                 )
                 }
+                <Link
+                    to={`raite/${id}`}
+                    className="text-white uppercase text-sm font-bold bg-gray-600 rounded-lg p-1 hover:bg-gray-800"
+                >
+                    See Raite</Link>
             </div>
-            <Link
-                to={`${id}`}
-                className="text-white uppercase text-sm font-bold bg-gray-600 rounded-lg p-1 hover:bg-gray-800"
-            >
-            See Raite</Link>
+
         </div>
     )
 }

@@ -4,7 +4,7 @@ import Alert from "../components/Alert"
 import axiosClient from "../config/axiosClient"
 import useAuth from "../hooks/useAuth"
 
-const LogIn = () => {
+const DriverLogIn = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [alert, setAlert] = useState({})
@@ -29,22 +29,17 @@ const LogIn = () => {
             return
         }
         try {
-            const { data } = await axiosClient.post('/api/users/login', {
+            const { data } = await axiosClient.post('/api/users/driver-login', {
                 email,
                 password
             })
             // console.log(data)
             //Saving token on localStorage
-            if (data.passengerId) {
+           
                 localStorage.setItem('token', data.token)
                 setAuth(data)
-                navigate('/raites/passenger')
-            } 
-            else{
-                localStorage.setItem('token', data.token)
-                setAuth(data)
-                navigate('/raites/driver')
-            }
+                navigate('/driver')
+            
 
         } catch (error) {
             setAlert({
@@ -100,12 +95,12 @@ const LogIn = () => {
             <nav className="lg:flex lg:justify-between">
                 <Link
                     className="block text-center my-3 text-slate-500 uppercase text-sm"
-                    to="/signUp"
+                    to="/signUp/driver"
                 >
                     Don't Have an Account? Sign Up</Link>
                 <Link
                     className="block text-center my-3 text-slate-500 uppercase text-sm"
-                    to="/forgot-password"
+                    to="/forgotPassword/driver"
                 >
                     Forgot my Password</Link>
             </nav>
@@ -113,4 +108,4 @@ const LogIn = () => {
     )
 }
 
-export default LogIn
+export default DriverLogIn

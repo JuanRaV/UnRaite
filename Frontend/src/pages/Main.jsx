@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom"
 
-const SignUp = () => {
+const Main = () => {
     return (
         <>
         <h1 className="text-indigo-400 font-black text-6xl capitalize text-center">Choose your Profile <span className="text-indigo-600">Type</span></h1>
             <div className="flex flex-row justify-between items-center mt-10">
-                <Link to='/signUp/driver'>
+                <Link to='/login/driver'>
                     <div className="text-center flex flex-col items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-40 h-40">
                             <path fillRule="evenodd" d="M8.25 6.75a3.75 3.75 0 1 1 7.5 0 3.75 3.75 0 0 1-7.5 0ZM15.75 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM2.25 9.75a3 3 0 1 1 6 0 3 3 0 0 1-6 0ZM6.31 15.117A6.745 6.745 0 0 1 12 12a6.745 6.745 0 0 1 6.709 7.498.75.75 0 0 1-.372.568A12.696 12.696 0 0 1 12 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 0 1-.372-.568 6.787 6.787 0 0 1 1.019-4.38Z" clipRule="evenodd" />
@@ -13,16 +13,18 @@ const SignUp = () => {
                         </svg>
 
                         <h2 className="text-indigo-400 font-black text-3xl">I give <span className="text-indigo-600">Raites</span></h2>
+                        <p className="font-bold text-gray-500 text-xl">Driver</p>
                     </div>
                 </Link>
 
-                <Link to="/signup/passenger">
+                <Link to="/login/passenger">
                     <div className="text-center flex flex-col items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-40 h-40">
                             <path d="M5.25 6.375a4.125 4.125 0 1 1 8.25 0 4.125 4.125 0 0 1-8.25 0ZM2.25 19.125a7.125 7.125 0 0 1 14.25 0v.003l-.001.119a.75.75 0 0 1-.363.63 13.067 13.067 0 0 1-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 0 1-.364-.63l-.001-.122ZM18.75 7.5a.75.75 0 0 0-1.5 0v2.25H15a.75.75 0 0 0 0 1.5h2.25v2.25a.75.75 0 0 0 1.5 0v-2.25H21a.75.75 0 0 0 0-1.5h-2.25V7.5Z" />
                         </svg>
 
                         <h2 className="text-indigo-400 font-black text-3xl">I want <span className="text-indigo-600">Raites</span></h2>
+                        <p className="font-bold text-gray-500 text-xl">Passenger</p>
                     </div>
                 </Link>
 
@@ -31,4 +33,4 @@ const SignUp = () => {
     )
 }
 
-export default SignUp
+export default Main

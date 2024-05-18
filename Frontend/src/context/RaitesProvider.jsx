@@ -101,11 +101,24 @@ const RaitesProvider = ({children}) =>{
             }
 
             const {data} = await axiosClient.post('/driver/create-raite', raite,config)
-
-            setAlert({})
-            setFormRaiteModal(false)
+            setRaite([...raites,data])
+            setAlert({
+                msg:"Raite Created Successfully",
+                error:false
+            })
+            setTimeout(()=>{
+                setAlert({})
+                navigate('/driver')
+            },3000)
         } catch (error) {
-            console.log(error)
+            setAlert({
+                msg:error.response.data.msg,
+                error:true
+            })
+            setTimeout(()=>{
+                setAlert({})
+                navigate('/driver')
+            },3000)
         }
     }
 
@@ -133,7 +146,7 @@ const RaitesProvider = ({children}) =>{
             })
             setTimeout(()=>{
                 setAlert({})
-                setFormRaiteModal(false)
+                navigate('/driver')
             },3000)
 
         } catch (error) {
@@ -141,8 +154,8 @@ const RaitesProvider = ({children}) =>{
         }
     }
     const submitRaite = async raite =>{
-        if(raite?.id)
-            editRaite(raite)
+        if(raite.id)
+            await editRaite(raite)
         else
             await createRaite(raite)
     }
@@ -152,6 +165,91 @@ const RaitesProvider = ({children}) =>{
         setFormRaiteModal(true)
     }
 
+    const completeRaite = async id =>{
+        try {
+            const token = localStorage.getItem("token")
+            if(!token) return
+            const config = {
+                headers:{
+                    "Content-Type":"application/json",
+                    Authorization:`Bearer ${token}`
+                }
+            }
+            const confirmReport = window.confirm('Are you sure you want to finish this raite?');
+            if (!confirmReport) return; // Exit if user cancels
+            await axiosClient.put(`/driver/complete-raite/${id}`,{},config)
+            // const updatedRaites = raites.map(raiteState => raiteState.id === data.id ? data : raiteState)
+            // setRaites(updatedRaites)
+            // setRaite({})
+            setAlert({
+                msg:'Raite Completed Successfully',
+                error: false
+            })
+            setTimeout(()=>{
+                setAlert({})
+                navigate('/driver')
+            },3000)
+        } catch (error) {
+            console.log(error.response)
+        }
+    }
+    const deleteRaite = async id =>{
+        const token = localStorage.getItem("token")
+        if(!token) return
+        const config = {
+            headers:{
+                "Content-Type":"application/json",
+                Authorization:`Bearer ${token}`
+            }
+        }
+        const confirmReport = window.confirm('Are you sure you want to cancel this raite?');
+        if (!confirmReport) return; // Exit if user cancels
+        await axiosClient.delete(`/driver/delete-raite/${id}`,config)
+
+        setAlert({
+            msg:'Raite Deleted Successfully',
+            error: false
+        })
+        setTimeout(()=>{
+            setAlert({})
+            navigate('/driver')
+        },3000)
+    }
+
+    const reportPassenger = async (passengerId, raiteId)=>{
+        const token = localStorage.getItem("token")
+        if(!token) return
+        const config = {
+            headers:{
+                "Content-Type":"application/json",
+                Authorization:`Bearer ${token}`
+            }
+        }
+        const confirmReport = window.confirm('Are you sure you want to report this passenger?');
+        if (!confirmReport) return; // Exit if user cancels
+        try {
+            await axiosClient.post(`/driver/strike-passenger/${passengerId}/${raiteId}`,{},config)
+
+            setAlert({
+                msg:'Passenger Reported Successfully',
+                error: false
+            })
+            setTimeout(()=>{
+                setAlert({})
+                navigate('/driver')
+            },3000)
+        } catch (error) {
+            setAlert({
+                msg:error.response.data.msg,
+                error: true
+            })
+            setTimeout(()=>{
+                setAlert({})
+            },3000)
+            console.log(error.response.data.msg)
+        }
+
+    }
     return(
         <RaitesContext.Provider
             value={{
@@ -164,7 +262,10 @@ const RaitesProvider = ({children}) =>{
                 formRaiteModal,
                 handleRaiteModal,
                 handleModalEditRaite,
-                submitRaite
+                submitRaite,
+                completeRaite,
+                deleteRaite,
+                reportPassenger
 
             }}
         >
