@@ -1,6 +1,5 @@
 import { Outlet, Navigate } from 'react-router-dom'
-import useAuth from '../hooks/useAuth'
-import HeaderPassenger from '../components/HeaderPassenger'
+import useAuth from '../hooks/useAuthDriver'
 import HeaderDriver from '../components/HeaderDriver'
 import Sidebar from '../components/Sidebar'
 
@@ -8,7 +7,7 @@ const ProtectedRouteDriver = () => {
     const { auth, loading } = useAuth()
     // console.log(auth)
     if (loading) return 'Loading...'
-
+    
     return (
         <>
             

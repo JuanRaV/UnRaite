@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { useParams } from "react-router-dom"
-import useRaites from "../hooks/useRaites"
+import useRaites from "../hooks/useRaitesDriver"
 import RaiteForm from "../components/RaiteForm"
 
 const EditRaite = () => {

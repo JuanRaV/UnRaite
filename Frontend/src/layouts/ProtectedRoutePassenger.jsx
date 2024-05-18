@@ -1,22 +1,20 @@
 import { Outlet, Navigate } from 'react-router-dom'
-import useAuth from '../hooks/useAuth'
+import useAuth from '../hooks/useAuthPassenger'
 import HeaderPassenger from '../components/HeaderPassenger'
-import HeaderDriver from '../components/HeaderDriver'
-import Sidebar from '../components/Sidebar'
 
-const ProtectedRouteDriver = () => {
+const ProtectedRoutePassenger = () => {
     const { auth, loading } = useAuth()
     // console.log(auth)
     if (loading) return 'Loading...'
-
+    console.log(auth)
     return (
         <>
             
-            {auth.driverId? (
+            {auth.passengerId? (
                 <div className="bg-gray-100">
-                    <HeaderDriver /> 
+                    <HeaderPassenger /> 
                     <div className="md:flex md:min-h-screen">
-                        <Sidebar/>
+                        
                         <main className="flex-1 p-10">
                             <Outlet />
                         </main>
@@ -31,4 +29,4 @@ const ProtectedRouteDriver = () => {
     )
 }
 
-export default ProtectedRouteDriver
+export default ProtectedRoutePassenger

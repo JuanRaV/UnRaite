@@ -23,7 +23,8 @@ const DriverAuthProvider = ({children}) => {
             }
             try {
                 const {data} = await axiosClient('/api/users/driver-profile',config)
-                setAuth(data)
+                if(data)
+                    setAuth(data)
                 // console.log(auth)
             } catch (error) {
                 console.log(error)
