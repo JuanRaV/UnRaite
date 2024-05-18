@@ -20,8 +20,8 @@ const passengersSignUp = async (req,res)=>{
     const existingPassengerNumber = await prisma.passenger.findUnique({where:{phoneNumber:phoneNum}})
 
     // console.log("----------------------------")
-    // console.log("frontStudentCredential: ",frontStudentCredential) 
-    // console.log("backStudentCredential: ",backStudentCredential) 
+    console.log("frontStudentCredential: ", ) 
+    console.log("backStudentCredential: ",backStudentCredential) 
     
     if(existingPassengerEmail){ 
         const error = new Error("Account already registered")

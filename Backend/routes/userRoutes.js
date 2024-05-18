@@ -7,7 +7,7 @@ const router = express.Router()
 
 
 router.post("/signup/passenger",upload.fields([{ name: 'frontStudentCredential', maxCount: 1 }, { name: 'backStudentCredential', maxCount: 1 }]), registerUser)
-router.post("/signup/driver", registerUser)
+router.post("/signup/driver",upload.fields([{ name: 'frontStudentCredential', maxCount: 1 }, { name: 'backStudentCredential', maxCount: 1 }]), registerUser)
 router.post("/login", login )
 router.post("/forgot-password", forgotPassword)
 router.get("/forgot-password/:token", checkToken)

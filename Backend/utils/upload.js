@@ -1,8 +1,10 @@
 import multer from 'multer';
+import generateID from "../helpers/generateID.js";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     console.log("upload des req.body:",req.body)
+    console.log("file: ",file)//here req.body is undefined
     if (!file.fieldname) {
       // Ignore files without fieldname attribute
       return;
@@ -17,12 +19,14 @@ const storage = multer.diskStorage({
     }
   },
   filename: (req, file, cb) => {
-
-    console.log("upload filename:",file)
-    console.log("upload filename req.body:",req.body)
-    if (file.fieldname == 'frontStudentCredential' || file.fieldname === 'backStudentCredential' ) {
-      console.log("upload pN: ",req.body.phoneNumber)
-      cb(null, `${req.body.phoneNumber}.${file.mimetype.split('/')[1]}`);
+    console.log('---------------------------------')
+    console.log(" filename:",file)//here also req.body is undefined
+    const filename = generateID()
+    console.log("id: ", filename)
+    console.log('---------------------------------')
+    if (file.fieldname == 'frontStudentCredential' || file.fieldname == 'backStudentCredential' || file.fieldname == 'frontDriversLicence' || file.fieldname == 'backDriversLicence' ) {
+      
+      cb(null, `${filename}.${file.mimetype.split('/')[1]}`);
     }else {
       cb(new Error('Invalid fieldname'), false);
     }

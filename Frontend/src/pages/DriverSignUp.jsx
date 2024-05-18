@@ -35,8 +35,8 @@ const SignUp = () => {
       alertDisapears()
       return
     }
-    const filePath = URL.createObjectURL(selectedFile);
-    setIdFront(filePath);
+    
+    setIdFront(selectedFile);
   };
   const handleBackImageChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -52,8 +52,8 @@ const SignUp = () => {
       alertDisapears()
       return
     }
-    const filePath = URL.createObjectURL(selectedFile);
-    setIdBack(filePath);
+    
+    setIdBack(selectedFile);
   };
 
   const handleFrontLicenceImageChange = (event) => {
@@ -70,8 +70,8 @@ const SignUp = () => {
       alertDisapears()
       return
     }
-    const filePath = URL.createObjectURL(selectedFile);
-    setLicenceFront(filePath);
+    
+    setLicenceFront(selectedFile);
   };
   const handleBackLicenceImageChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -87,8 +87,8 @@ const SignUp = () => {
       alertDisapears()
       return
     }
-    const filePath = URL.createObjectURL(selectedFile);
-    setLicenceBack(filePath);
+    
+    setLicenceBack(selectedFile);
   };
   const handleSubmit = async e => {
     e.preventDefault()
@@ -116,16 +116,22 @@ const SignUp = () => {
       alertDisapears()
       return
     }
-    // Connect with back and create user
-    const number = parseInt(phoneNumber)
+    console.log(idFront)
+    const formData = new FormData()
+    formData.append("frontStudentCredential",idFront)
+    formData.append("backStudentCredential",idBack)
+    //name, email, phoneNumber, idFront, idBack, password, repeatPassword
+    formData.append("name",name)
+    formData.append("email",email)
+    formData.append("phoneNumber",phoneNumber)
+    formData.append("password",password)
+
+ 
     try {
-      const { data } = await axiosClient.post('/api/users/signup/passenger', {
-        name,
-        email,
-        phoneNumber:number,
-        password,
-        frontStudentCredential: idFront,
-        backStudentCredential: idBack
+      const { data } = await axiosClient.post('/api/users/signup/driver',formData,{
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
       })
       setAlert({
         msg:data.msg,
