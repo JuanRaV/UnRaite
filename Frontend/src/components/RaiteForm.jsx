@@ -77,7 +77,11 @@ const RaiteForm = () => {
     //         setIdUpdate()
     //     }
     // },[id])
-
+    const alertDisapears = ()=>{
+        setTimeout(()=>{
+            showAlert()
+        },3000)
+    }
     const handleSubmit = async e => {
         e.preventDefault()
         if ([startHour, date, capacity, startingPoint, arrivalPoint].includes('')) {
@@ -85,6 +89,7 @@ const RaiteForm = () => {
                 msg: 'All fields are required',
                 error: true
             })
+            alertDisapears()
             return
         }
         else if (capacity > 4) {
@@ -92,6 +97,7 @@ const RaiteForm = () => {
                 msg: 'The max capacity is 4',
                 error: true
             })
+            alertDisapears()
             return
         }
         else if (capacity <= 0) {
@@ -99,6 +105,7 @@ const RaiteForm = () => {
                 msg: 'Choose a valid capacity',
                 error: true
             })
+            alertDisapears()
             return
         }
         

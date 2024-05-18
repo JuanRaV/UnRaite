@@ -111,7 +111,14 @@ const RaitesProvider = ({children}) =>{
                 navigate('/driver')
             },3000)
         } catch (error) {
-            console.log(error)
+            setAlert({
+                msg:error.response.data.msg,
+                error:true
+            })
+            setTimeout(()=>{
+                setAlert({})
+                navigate('/driver')
+            },3000)
         }
     }
 
@@ -195,6 +202,8 @@ const RaitesProvider = ({children}) =>{
                 Authorization:`Bearer ${token}`
             }
         }
+        const confirmReport = window.confirm('Are you sure you want to cancel this raite?');
+        if (!confirmReport) return; // Exit if user cancels
         await axiosClient.delete(`/driver/delete-raite/${id}`,config)
 
         setAlert({
