@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import useRaites from "../hooks/useRaites"
 import Alert from "./Alert"
 import axiosClient from "../config/axiosClient"
@@ -21,6 +21,8 @@ const RaiteForm = () => {
     // const selectedOption = ''
 
     const { id } = useParams()
+
+    const navigate = useNavigate()
     // console.log(start)
     // console.log(price)
     const { showAlert, alert, submitRaite, raite } = useRaites()
@@ -33,12 +35,12 @@ const RaiteForm = () => {
                 console.log(error)
             }
         }
-        
+
         fetchTowns()
     }, [])
 
-    useEffect(()=>{
-        if(id){
+    useEffect(() => {
+        if (id) {
             setIdUpdate(raite.id)
             setStart(raite.start)
             setDestination(raite.destination)
@@ -50,26 +52,26 @@ const RaiteForm = () => {
             setStartingPoint(raite.startingPoint)
             setArrivalPoint(raite.arrivalPoint)
         }
-    },[id])
+    }, [id])
 
-    if(start!=="Guadalajara"){
-        useEffect(()=>{
-            console.log("Start", start);                        
+    if (start !== "Guadalajara") {
+        useEffect(() => {
+            console.log("Start", start);
             const matchingTown = towns.find(townActual => townActual.townName === start);
             console.log("matching town", matchingTown);
             setPrice(matchingTown?.price || 0); // Reset and update price
-        },[start])
+        }, [start])
     }
 
-    else if(start=="Guadalajara"){
-        useEffect(()=>{
-            console.log("Start", destination);                        
+    else if (start == "Guadalajara") {
+        useEffect(() => {
+            console.log("Start", destination);
             const matchingTown = towns.find(townActual => townActual.townName === destination);
             console.log("matching town", matchingTown);
             setPrice(matchingTown?.price || 0); // Reset and update price
-        },[destination])
+        }, [destination])
     }
-    else{
+    else {
         console.log("Todo bien")
     }
     // useEffect(()=>{
@@ -77,19 +79,22 @@ const RaiteForm = () => {
     //         setIdUpdate()
     //     }
     // },[id])
-    const alertDisapears = ()=>{
-        setTimeout(()=>{
+    const alertDisapears = () => {
+        setTimeout(() => {
             showAlert()
-        },3000)
+        }, 3000)
     }
     const handleSubmit = async e => {
         e.preventDefault()
+        const today = new Date(); // Get today's date
+        const selectedDate = new Date(date)
+        
         if ([startHour, date, capacity, startingPoint, arrivalPoint].includes('')) {
             showAlert({
                 msg: 'All fields are required',
                 error: true
             })
-            alertDisapears()
+            // alertDisapears()
             return
         }
         else if (capacity > 4) {
@@ -97,7 +102,8 @@ const RaiteForm = () => {
                 msg: 'The max capacity is 4',
                 error: true
             })
-            alertDisapears()
+            // alertDisapears()
+            
             return
         }
         else if (capacity <= 0) {
@@ -105,14 +111,21 @@ const RaiteForm = () => {
                 msg: 'Choose a valid capacity',
                 error: true
             })
-            alertDisapears()
+            // alertDisapears()
             return
         }
-        
+        else if (selectedDate < today) {
+            showAlert({
+                msg: 'Choose a future date',
+                error: true
+            })
+            // alertDisapears()
+            return
+        }
         // Pass data to the provider
         const intCapacity = parseInt(capacity)
         const intPrice = parseInt(price)
-        await submitRaite({id:idUpdate,startHour,date, start, startingPoint, destination, arrivalPoint, capacity:intCapacity,price:intPrice})
+        await submitRaite({ id: idUpdate, startHour, date, start, startingPoint, destination, arrivalPoint, capacity: intCapacity, price: intPrice })
         setIdUpdate(null)
         setStartHour("")
         setDate("")
@@ -124,8 +137,8 @@ const RaiteForm = () => {
         setPrice("")
     }
 
-    
-    
+
+
     const { msg } = alert
     return (
         <form
@@ -161,15 +174,15 @@ const RaiteForm = () => {
             <div className="flex justify-between mt-5">
                 {option == "voy" ? (
                     <>
-                        
+
                         <div>
                             <p className="text-gray-700 uppercase font-bold text-sm mt-5 text-center">Select Your Origin</p>
                             {/* {setStart(e.target.value.townName);setPrice(e.target.value.price)} */}
-                            <select onChange={ (e) => { 
-                                    setDestination("Guadalajara")
-                                    setStart(e.target.value);
-                                    console.log(start)
-                                }}
+                            <select onChange={(e) => {
+                                setDestination("Guadalajara")
+                                setStart(e.target.value);
+                                console.log(start)
+                            }}
                                 className="mb-5 border p-1 rounded-lg">
                                 {towns.map(town => (
 
@@ -184,17 +197,17 @@ const RaiteForm = () => {
 
                 ) : (
                     <>
-                        
+
                         <div>
                             <p className="text-gray-700 uppercase font-bold text-sm mt-5 text-center">Select your Destination</p>
-                            <select 
-                                  onChange={(e) => {
-                                    
+                            <select
+                                onChange={(e) => {
+
                                     console.log(e.target.value)
                                     setDestination(e.target.value);
                                     setStart("Guadalajara")
-                                  }}
-                            className="mb-5 border p-1 rounded-lg">
+                                }}
+                                className="mb-5 border p-1 rounded-lg">
                                 {towns.map(town => (
                                     <option key={town.id} value={town.townName}>
                                         {town.townName}
