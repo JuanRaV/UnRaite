@@ -1,8 +1,15 @@
 import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient()
 import bcrypt from 'bcrypt'
 import generateJWT from "../helpers/generateJWT.js";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
-const prisma = new PrismaClient()
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const checkPassword = async function (admin, password) {
     return await bcrypt.compare(password, admin.password)
 }
@@ -89,9 +96,47 @@ const getAllUsers = async (req, res) => {
 
 }
 
+const getImage= async (req,res) => {
+    try{
+        const id = req.params.id
+        const imageType = req.params.imageType 
+        const userType = req.params.userType
+        let typeId;
+
+        if(userType == 'driver'){
+            typeId = "driverId"
+        }else{
+            typeId = "passengerId"
+        }
+
+        let imagePath = await prisma[userType].findUnique({
+            where: {
+                [typeId]: id,
+              },
+              select: {
+                [imageType]: true,
+              },
+        })
+        
+        if (!imagePath) {
+            return res.status(404).send('Image not found');
+          }
+        let file = path.join(__dirname, '..', imagePath[imageType]);
+   
+        if (fs.existsSync(file)) {
+            res.sendFile(file);
+        } else {
+            res.status(404).send('La imagen de perfil no se encuentra');
+        }
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Error al obtener la imagen de perfil del estudiante');
+    }
+}
 export {
     login,
     getPassengers,
     getDrivers,
-    getAllUsers
+    getAllUsers,
+    getImage
 }

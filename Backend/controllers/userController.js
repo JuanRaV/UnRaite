@@ -58,14 +58,21 @@ const passengersSignUp = async (req, res) => {
 //DRIVER SIGNUP
 const dirversSignUp = async (req, res) => {
     // Avoid duplicates
-    const { name, email, password, phoneNumber, frontDriversLicence, backDriversLicence, frontStudentCredential, backStudentCredential, verified } = req.body
+    const { name, email, password, phoneNumber, verified } = req.body
 
+    const frontStudentCredential = req.files && req.files.frontStudentCredential ? req.files.frontStudentCredential[0] : undefined;
+    const backStudentCredential = req.files && req.files.backStudentCredential ? req.files.backStudentCredential[0] : undefined;
+    const frontDriversLicence = req.files && req.files.frontDriversLicence ? req.files.frontDriversLicence[0] : undefined;
+    const backDriversLicence = req.files && req.files.backDriversLicence ? req.files.backDriversLicence[0] : undefined;
+    const phoneNum= parseInt(phoneNumber)
     const existingPassengerEmail = await prisma.passenger.findUnique({ where: { email } })
-    const existingPassengerNumber = await prisma.passenger.findUnique({ where: { phoneNumber } })
+    const existingPassengerNumber = await prisma.passenger.findUnique({ where: { phoneNumber:phoneNum } })
 
     const existingDriverEmail = await prisma.driver.findUnique({ where: { email } })
-    const existingDriverNumber = await prisma.driver.findUnique({ where: { phoneNumber } })
+    const existingDriverNumber = await prisma.driver.findUnique({ where: { phoneNumber:phoneNum } })
 
+    console.log("front Licence: ",frontDriversLicence)
+    console.log("back licence: ",backDriversLicence)
     const token = generateID()
 
     if (existingPassengerEmail || existingDriverEmail) {
@@ -84,9 +91,9 @@ const dirversSignUp = async (req, res) => {
                 name,
                 email,
                 password: hashedPassword,
-                phoneNumber,
-                frontStudentCredential,
-                backStudentCredential,
+                phoneNumber:phoneNum,
+                frontStudentCredential: 'uploads/frontStudentCredentials/' + frontStudentCredential.filename,
+                backStudentCredential: `uploads/backStudentCredentials/${backStudentCredential.filename}`,
                 verified: false,
                 // token: 'p' + token
             }
@@ -98,11 +105,11 @@ const dirversSignUp = async (req, res) => {
                 name,
                 email,
                 password: hashedPassword,
-                phoneNumber,
-                frontDriversLicence,
-                backDriversLicence,
-                frontStudentCredential,
-                backStudentCredential,
+                phoneNumber:phoneNum,
+                frontDriversLicence:`uploads/frontDriversLicences/${frontDriversLicence.filename}`,
+                backDriversLicence:`uploads/backDriversLicences/${backDriversLicence.filename}`,
+                frontStudentCredential: 'uploads/frontStudentCredentials/' + frontStudentCredential.filename,
+                backStudentCredential: `uploads/backStudentCredentials/${backStudentCredential.filename}`,
                 verified: false,
                 // token: 'd' + token
             }

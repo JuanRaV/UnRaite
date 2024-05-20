@@ -120,7 +120,8 @@ const SignUp = () => {
     const formData = new FormData()
     formData.append("frontStudentCredential",idFront)
     formData.append("backStudentCredential",idBack)
-    //name, email, phoneNumber, idFront, idBack, password, repeatPassword
+    formData.append("frontDriversLicence",licenceFront)
+    formData.append("backDriversLicence",licenceBack)
     formData.append("name",name)
     formData.append("email",email)
     formData.append("phoneNumber",phoneNumber)
@@ -128,7 +129,7 @@ const SignUp = () => {
 
  
     try {
-      const { data } = await axiosClient.post('/api/users/signup/driver',formData,{
+        await axiosClient.post('/api/users/signup/driver',formData,{
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -146,7 +147,7 @@ const SignUp = () => {
       setRepeatPassword('')
     } catch (error) {
       setAlert({
-        msg: error.response.data.msg,
+        msg: error.response,
         error: true
       })
     }
@@ -311,7 +312,7 @@ const SignUp = () => {
           Already Have an Account? Sign In</Link>
         <Link
           className="block text-center my-3 text-slate-500 uppercase text-sm"
-          to="/forgotPassword/driver"
+          to="/forgot-password"
         >
           Forgot my Password</Link>
       </nav>

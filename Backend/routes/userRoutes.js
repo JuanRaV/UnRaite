@@ -7,7 +7,7 @@ const router = express.Router()
 
 
 router.post("/signup/passenger",upload.fields([{ name: 'frontStudentCredential', maxCount: 1 }, { name: 'backStudentCredential', maxCount: 1 }]), passengersSignUp)
-router.post("/signup/driver",upload.fields([{ name: 'frontStudentCredential', maxCount: 1 }, { name: 'backStudentCredential', maxCount: 1 },]), dirversSignUp)
+router.post("/signup/driver",upload.fields([{ name: 'frontStudentCredential', maxCount: 1 }, { name: 'backStudentCredential', maxCount: 1 },{ name: 'frontDriversLicence', maxCount: 1 },{ name: 'backDriversLicence', maxCount: 1 }]), dirversSignUp)
 router.post("/passenger-login", passengerLogin )
 router.post("/driver-login", driverLogin )
 router.post("/forgot-password/passenger", PassengerForgotPassword)

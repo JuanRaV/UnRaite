@@ -13,7 +13,9 @@ const createRaite = async (req, res) => {
 
   try {
     const raiteInProgress = await prisma.raite.findFirst({
-      where:{completed:false}
+      where:{
+        driverId,
+        completed:false}
     })
 
     if(raiteInProgress){

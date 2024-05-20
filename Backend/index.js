@@ -30,7 +30,7 @@ app.use(cors())
 
 
 //Routes
-app.use('/',adminRoutes)
+app.use('/admin',adminRoutes)
 app.use('/api/users', userRoutes)
 app.use("/driver", driverRoutes)
 app.use('/passenger', passengerRoutes)

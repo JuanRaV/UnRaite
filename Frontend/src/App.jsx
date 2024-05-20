@@ -21,6 +21,7 @@ import DriverNewPassword from './pages/DriverNewPassword'
 import PassengerForgotPassword from './pages/PassengerForgotPassword'
 import PassengerNewPassword from './pages/PassengerNewPassword'
 import RaiteInfoPassenger from './components/RaiteInfoPassenger'
+import UserInfo from './pages/Admin'
 
 import { DriverAuthProvider } from './context/DriverAuthProvider'
 import { PassengerAuthProvider } from './context/PassengerAuthProvider'
@@ -48,6 +49,7 @@ const App = () => {
                   <Route path='forgotPassword/passenger' element={<PassengerForgotPassword />} />
                   <Route path='newPassword/passenger/:token' element={<PassengerNewPassword />} />
                   <Route path='newPassword/driver/:token' element={<DriverNewPassword />} />
+                  <Route path='admin' element={<UserInfo />} />
                 </Route>
 
                 {/* Private Area for DRIVERS*/}
