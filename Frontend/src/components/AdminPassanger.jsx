@@ -1,8 +1,28 @@
 import React from 'react';
+import axiosClient from '../config/axiosClient';
 
 const PassengerInfo = ({ passenger }) => {
   const { name, email, phoneNumber, passengerId, frontStudentCredential, backStudentCredential } = passenger;
- 
+
+  const handleAccept = async () => {
+    try {
+      await axiosClient.post(`/admin/accept-user/${passengerId}/passenger`);
+      alert('Passenger accepted successfully.');
+    } catch (error) {
+      console.error('Error accepting passenger:', error);
+      alert('Failed to accept passenger.');
+    }
+  };
+
+  const handleDecline = async () => {
+    try {
+      await axiosClient.post(`/admin/decline-user/${passengerId}/passenger`);
+      alert('Passenger declined successfully.');
+    } catch (error) {
+      console.error('Error declining passenger:', error);
+      alert('Failed to decline passenger.');
+    }
+  };
 
   return (
     <div className="border-b p-5 flex flex-col md:flex-row justify-between">
@@ -20,6 +40,10 @@ const PassengerInfo = ({ passenger }) => {
           <h3 className="font-bold">Back Student Credential:</h3>
           <img src={`http://localhost:3000/admin/get-image/${passengerId}/passenger/backStudentCredential`} alt="Back Student Credential" />
         </div>
+      </div>
+      <div className="flex gap-2 mt-4">
+        <button className="bg-green-500 text-white p-2 rounded-lg hover:bg-green-700" onClick={handleAccept}>Accept</button>
+        <button className="bg-red-500 text-white p-2 rounded-lg hover:bg-red-700" onClick={handleDecline}>Decline</button>
       </div>
     </div>
   );

@@ -48,6 +48,7 @@ const getPassengers = async (req, res) => {
         // return console.log(driverIds)
         const allPassengers = await prisma.passenger.findMany({
             where: {
+                audited: false,
                 NOT: {
                     email: {
                         in: allDrivers.map(driver => driver.email)
@@ -64,7 +65,11 @@ const getPassengers = async (req, res) => {
 
 const getDrivers = async (req, res) => {
     try {
-        const allDrivers = await prisma.driver.findMany()
+        const allDrivers = await prisma.driver.findMany({
+            where:{
+                audited: false,
+            }
+        })
         // const passenger 
         res.json(allDrivers)
     } catch (error) {
@@ -130,6 +135,68 @@ const getImage= async (req,res) => {
         }
     } catch (error) {
       console.error(error);
+      res.status(500).send('Error al obtener la imagen');
+    }
+}
+
+const declineUser = async(req,res)=>{
+    try{
+        const id = req.params.id
+        const userType = req.params.userType 
+        let typeId;
+
+        if(userType == 'driver'){
+            typeId = "driverId"
+        }else{
+            typeId = "passengerId"
+        }
+
+        let declineUser = await prisma[userType].update({
+            where: {
+                [typeId]: id,
+              },
+            data:{
+                audited:true,
+                verified: false
+            }
+        })
+
+        if(declineUser){
+            res.status(200)
+        }
+    }catch(error){
+        console.error(error);
+      res.status(500).send('Error al obtener la imagen de perfil del estudiante');
+    }
+}
+
+const acceptUser = async(req,res)=>{
+    try{
+        const id = req.params.id
+        const userType = req.params.userType 
+        let typeId;
+
+        if(userType == 'driver'){
+            typeId = "driverId"
+        }else{
+            typeId = "passengerId"
+        }
+
+        let acceptUser = await prisma[userType].update({
+            where: {
+                [typeId]: id,
+              },
+            data:{
+                audited:true,
+                verified: true
+            }
+        })
+
+        if(acceptUser){
+            res.status(200)
+        }
+    }catch(error){
+        console.error(error);
       res.status(500).send('Error al obtener la imagen de perfil del estudiante');
     }
 }
@@ -138,5 +205,7 @@ export {
     getPassengers,
     getDrivers,
     getAllUsers,
-    getImage
+    getImage,
+    acceptUser,
+    declineUser
 }

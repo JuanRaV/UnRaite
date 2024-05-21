@@ -1,8 +1,29 @@
 import React from 'react';
 import axiosClient from '../config/axiosClient';
-const DriverInfo = ({ driver }) => {
-  const { name, email, phoneNumber, driverId, frontDriversLicence, backDriversLicence, frontStudentCredential, backStudentCredential } = driver;
 
+const DriverInfo = ({ driver }) => {
+  const { name, email, phoneNumber, driverId } = driver;
+
+  const handleAccept = async () => {
+    try {
+      await axiosClient.post(`/admin/accept-user/${driverId}/driver`)
+      window.confirm('Driver accepted successfully.');
+      
+    } catch (error) {
+      console.error('Error accepting driver:', error);
+      alert('Failed to accept driver.');
+    }
+  };
+
+  const handleDecline = async () => {
+    try {
+      await axiosClient.post(`/admin/decline-user/${driverId}/driver`);
+      window.alert('Driver declined successfully.');
+    } catch (error) {
+      console.error('Error declining driver:', error);
+      alert('Failed to decline driver.');
+    }
+  };
 
   return (
     <div className="border-b p-5 flex flex-col md:flex-row justify-between">
@@ -28,6 +49,10 @@ const DriverInfo = ({ driver }) => {
           <h3 className="font-bold">Back Driver's Licence:</h3>
           <img src={`http://localhost:3000/admin/get-image/${driverId}/driver/backDriversLicence`} alt="Back Driver's Licence" />
         </div>
+      </div>
+      <div className="flex gap-2 mt-4">
+        <button className="bg-green-500 text-white p-2 rounded-lg hover:bg-green-700" onClick={handleAccept}>Accept</button>
+        <button className="bg-red-500 text-white p-2 rounded-lg hover:bg-red-700" onClick={handleDecline}>Decline</button>
       </div>
     </div>
   );

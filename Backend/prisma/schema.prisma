@@ -30,6 +30,7 @@ model Driver {
   frontStudentCredential String
   backStudentCredential  String
   verified               Boolean           @default(false)
+  audited                Boolean           @default(false)
   token                  String?           @default("")
   strike                 Int?              @default(0)
   raites                 Raite[]
@@ -46,6 +47,7 @@ model Passenger {
   frontStudentCredential String
   backStudentCredential  String
   verified               Boolean           @default(false)
+  audited                Boolean           @default(false)
   token                  String?           @default("")
   strike                 Int?              @default(0)
   raite                  PassengerRaite[]
