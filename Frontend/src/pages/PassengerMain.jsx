@@ -1,17 +1,21 @@
 import { useEffect, useState } from "react"
 import axiosClient from "../config/axiosClient"
 import useRaites from "../hooks/useRaitesPassenger"
+import useAuth from "../hooks/useAuthPassenger"
 import Alert from "../components/Alert"
 import RaitePreviewPassenger from "../components/RaitePreviewPassenger"
 
 const PassengerMain = () => {
     let { raites } = useRaites()
+    const {auth} = useAuth()
     const [towns, setTowns] = useState([])
     const [raitesFilter, setRaitesFilter] = useState([])
     const [option, setOption] = useState("")
     const [start, setStart] = useState("")
     const [destination, setDestination] = useState("")
+    const [currentRaite,setCurrentRaite] = useState({})
     raites = raites.allRaites
+    console.log(auth.raite[0]?.raiteId)
     console.log(raites)
     useEffect(() => {
         const fetchTowns = async () => {
@@ -32,6 +36,19 @@ const PassengerMain = () => {
         })
         setRaitesFilter(raitesFiltrados)
     },[start,destination])
+
+    useEffect(()=>{
+        const getCurrentRaite = ()=>{
+            const currentId = auth.raite[0]?.raiteId
+            const currentRaite = raites?.filter(raite=>{
+                return raite.id==currentId
+            })
+            setCurrentRaite(currentRaite)
+        }
+        getCurrentRaite()
+    },[])
+    // console.log(currentRaite[0]?)
+
 
     const seeAll=()=>{
         setStart("")
@@ -134,10 +151,19 @@ const PassengerMain = () => {
 
             </div>
             <h2 className="text-gray-700 uppercase font-bold text-xl mt-5">Current Raite</h2>
-            <div className="bg-white shadow mt-10 rounded-lg">
-                    
+            <div className="bg-white shadow mt-3 rounded-lg">
+                {currentRaite?.length?(
+                    <RaitePreviewPassenger
+                        key={currentRaite[0]?.id}
+                        raite={currentRaite[0]}
+                        
+                    />
+                ):(
+                    <p className="p-5 text-center text-gray-600 uppercase font-bold">No <span className="text-indigo-300">Raites</span> Reserved</p>
+                )}
             </div>
-            <div className="bg-white shadow mt-10 rounded-lg">
+            <h2 className="text-gray-700 uppercase font-bold text-xl mt-8">Other Raites</h2>
+            <div className="bg-white shadow mt-3 rounded-lg">
                 {raitesFilter?.length ?
                     raitesFilter.map(raite => (
                         <RaitePreviewPassenger
