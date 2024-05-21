@@ -125,7 +125,7 @@ const PassengerMain = () => {
 
             </div>
             <div className="bg-white shadow mt-10 rounded-lg">
-                {raites.length ?
+                {raites?.length ?
                     raites.map(raite => (
                         <RaitePreviewPassenger
                             key={raite.id}
