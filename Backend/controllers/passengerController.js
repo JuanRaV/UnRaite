@@ -7,7 +7,8 @@ const getAllRaites = async (req, res) => {
         where: {
             capacity: {
                 not: 0
-            }
+            },
+            completed:false
         }
     });
     if (!allRaites)
@@ -51,11 +52,13 @@ const acceptRaite = async (req, res) => {
             where: { id: num }
         });
         const passengerRaite = await prisma.passengerRaite.findFirst({ where: { passengerId, raiteId: num } })
-
+        const passengerWithRaite = await prisma.passengerRaite.findFirst({where :{passengerId, raiteId:{not:num}, raite:{completed:false}}})
         if (!raite)
             return res.status(404).json({ msg: 'Raite not found' });
         else if (passengerRaite)
             return res.status(404).json({ msg: 'You are already in this trip' });
+        else if(passengerWithRaite)
+            return res.status(404).json({ msg: 'You are in other trip' });
         else if (raite.completed == true)
             return res.status(404).json({ msg: 'Raite already completed' });
         else if (raite.capacity == 0)

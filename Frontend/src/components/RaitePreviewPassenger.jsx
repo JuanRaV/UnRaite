@@ -4,6 +4,8 @@ import useAuth from "../hooks/useAuthPassenger"
 const RaitePreviewPassenger = ({raite}) => {
     const {auth} = useAuth()
     const {id, start, destination, date, startHour} = raite
+    // console.log("origin",origin)
+    // console.log("destinationFilter", destinationFilter)
   return (
     <div className="border-b p-5 flex flex-col md:flex-row justify-between">
     <div className=" flex items-center gap-2">

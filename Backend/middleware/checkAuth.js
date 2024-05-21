@@ -124,7 +124,7 @@ const checkPassengersAuth = async (req, res, next) => {
                     },
                 });
                 if (!passenger)
-                    return res.status(404).json({ msg: "Driver not found" })
+                    return res.status(404).json({ msg: "Passenger not found" })
                 console.log(passenger)
                 req.passenger = passenger
                 console.log("Sesion guardada con exito")

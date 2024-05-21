@@ -17,7 +17,7 @@ const RaitesDriverProvider = ({children}) =>{
     const navigate = useNavigate()
 
     const {auth} = useAuth()
-
+    console.log(auth)
     
     const showAlert = alert =>{
         setAlert(alert)
@@ -48,7 +48,7 @@ const RaitesDriverProvider = ({children}) =>{
             }
         }
         getRaites()
-    },[auth])
+    },[auth.driverId])
 
     const getRaite = async id =>{
         setLoading(true)

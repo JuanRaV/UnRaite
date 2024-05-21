@@ -17,7 +17,7 @@ const RaitesPassengerProvider = ({children}) =>{
     const navigate = useNavigate()
 
     const {auth} = useAuth()
-
+    console.log(auth)
     
     const showAlert = alert =>{
         setAlert(alert)
@@ -48,50 +48,174 @@ const RaitesPassengerProvider = ({children}) =>{
             }
         }
         getRaites()
-    },[auth])
+    },[])
 
-    // const getRaite = async id =>{
-    //     setLoading(true)
-    //     try {
-    //         const token = localStorage.getItem('token')
+    const getRaite = async id =>{
+        setLoading(true)
+        try {
+            const token = localStorage.getItem('token')
 
-    //         if(!token) return
+            if(!token) return
 
-    //         const config = {
-    //             headers:{
-    //                 "Content-Type":"application/json",
-    //                 Authorization:`Bearer ${token}`
-    //             }
-    //         }
+            const config = {
+                headers:{
+                    "Content-Type":"application/json",
+                    Authorization:`Bearer ${token}`
+                }
+            }
 
-    //         const {data} = await axiosClient(`/driver/get-raite/${id}`,config)
+            const {data} = await axiosClient(`/passenger/${id}`,config)
             
-    //         setRaite(data)
-    //         setAlert({})
+            setRaite(data)
+            setAlert({})
 
-    //     } catch (error) {
-    //         navigate('/raites/driver')
-    //         setAlert({
-    //             msg:error.response.data.msg,
-    //             error:true
-    //         })
-    //         setTimeout(()=>{
-    //             setAlert({})
-    //         },3000)
-    //     }finally{
-    //         setLoading(false)
-    //     }
-    // }
+        } catch (error) {
+            
+            setAlert({
+                msg:error.response.data.msg,
+                error:true
+            })
+            setTimeout(()=>{
+                setAlert({})
+                navigate('/passenger')
+            },3000)
+        }finally{
+            setLoading(false)
+        }
+    }
+    const reserveRaite = async id =>{
+        setLoading(true)
+        try {
+            const token = localStorage.getItem('token')
+
+            if(!token) return
+
+            const config = {
+                headers:{
+                    "Content-Type":"application/json",
+                    Authorization:`Bearer ${token}`
+                }
+            }
+
+            await axiosClient.put(`/passenger/accept-raite/${id}`,{},config)
+            setAlert({
+                msg:"Raite accepted successfully",
+                error:false
+            })
+            setTimeout(()=>{
+                setAlert({})
+                navigate('/passenger')
+            },3000)
+
+
+        } catch (error) {
+            
+            setAlert({
+                msg:error.response.data.msg,
+                error:true
+            })
+            setTimeout(()=>{
+                setAlert({})
+                navigate('/passenger')
+            },3000)
+        }finally{
+            setLoading(false)
+        }
+    }
+
+    const cancelReservation = async id=>{
+        setLoading(true)
+        try {
+            const token = localStorage.getItem('token')
+
+            if(!token) return
+
+            const config = {
+                headers:{
+                    "Content-Type":"application/json",
+                    Authorization:`Bearer ${token}`
+                }
+            }
+            const confirmReport = window.confirm('Are you sure you want to cancel this reservarion?');
+            if (!confirmReport) return; // Exit if user cancels
+            await axiosClient.delete(`/passenger/cancel-raite/${id}`,config)
+            setAlert({
+                msg:"Raite unreserved successfully",
+                error:false
+            })
+            setTimeout(()=>{
+                setAlert({})
+                navigate('/passenger')
+            },3000)
+
+
+        } catch (error) {
+            
+            setAlert({
+                msg:error.response.data.msg,
+                error:true
+            })
+            setTimeout(()=>{
+                setAlert({})
+                navigate('/passenger')
+            },3000)
+        }finally{
+            setLoading(false)
+        }
+    }
+
+    const reportDriver=async (driverId, raiteId) =>{
+        console.log("raite id",raiteId)
+        console.log("driver id", driverId)
+        try {
+            const token = localStorage.getItem('token')
+
+            if(!token) return
+
+            const config = {
+                headers:{
+                    "Content-Type":"application/json",
+                    Authorization:`Bearer ${token}`
+                }
+            }
+            const confirmReport = window.confirm('Are you sure you want to cancel this reservarion?');
+            if (!confirmReport) return; // Exit if user cancels
+
+            const{data}= await axiosClient.post(`/passenger/strike-driver/${driverId}/${raiteId}`, {},config)
+            
+            setAlert({
+                msg:"Report created successfully",
+                error:false
+            })
+            setTimeout(()=>{
+                setAlert({})
+                navigate('/passenger')
+            },3000)
+
+        } catch (error) {
+            setAlert({
+                msg:error.response.data.msg,
+                error:true
+            })
+            setTimeout(()=>{
+                setAlert({})
+                navigate('/passenger')
+            },3000)
+        }
+    }
 
     return(
         <RaitesContext.Provider
             value={{
                 raites,
                 raite,
+                getRaite,
                 alert,
                 showAlert,
                 setAlert,
-
+                cancelReservation,
+                reserveRaite,
+                reportDriver
             }}
         >
             {children}

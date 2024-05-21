@@ -174,7 +174,7 @@ async function main() {
       destination: "Guadalajara",
       arrivalPoint: "Midtown",
       capacity: 3,
-      price: 23,
+      price: 600,
       driverId: driver1.driverId
 
     }
@@ -192,7 +192,7 @@ async function main() {
       destination: "Guadalajara",
       arrivalPoint: "RIU",
       capacity: 2,
-      price: 60,
+      price: 700,
       driverId: driver2.driverId
 
     }
@@ -210,7 +210,7 @@ async function main() {
       destination: "Tequila",
       arrivalPoint: "Cantaritos el Guero",
       capacity: 4,
-      price: 160,
+      price: 250,
       driverId: driver1.driverId
 
     }
@@ -228,7 +228,7 @@ async function main() {
       destination: "San Sebastian",
       arrivalPoint: "Plaza",
       capacity: 1,
-      price: 110,
+      price: 350,
       driverId: driver2.driverId
 
     }
