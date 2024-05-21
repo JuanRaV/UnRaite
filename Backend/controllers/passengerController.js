@@ -201,10 +201,37 @@ const strike = async (req, res) => {
     }
 }
 
+const current = async (req, res) => {
+    const {id} =req.params
+    const num = parseInt(id)
+    try {
+        const { passengerId } = req.passenger;
+        // console.log("req pass", req.passenger)
+        const inProgressRides = await prisma.passengerRaite.findMany({
+            where: {
+                passengerId: passengerId,
+                raiteId:num,
+                raite: {
+                    completed: false
+                }
+            },
+            include: {
+                raite: true
+            }
+        });
+        console.log(inProgressRides)
+        if(!inProgressRides)
+        res.status(200).json(inProgressRides);
+    } catch (error) {
+        console.error('Error checking passenger rides in progress:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
 export {
     getAllRaites,
     getOneRaite,
     acceptRaite,
     cancelRaite,
-    strike
+    strike,
+    current
 }
