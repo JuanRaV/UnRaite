@@ -161,9 +161,10 @@ const declineUser = async(req,res)=>{
             }
         })
 
-        if(declineUser){
-            res.status(200)
-        }
+        if(!declineUser)
+            res.status(500).json({ msg: "Failed to decline User" });
+        res.json({ msg: "User declined successfully" })
+        
     }catch(error){
         console.error(error);
       res.status(500).send('Error al obtener la imagen de perfil del estudiante');
@@ -192,9 +193,9 @@ const acceptUser = async(req,res)=>{
             }
         })
 
-        if(acceptUser){
-            res.status(200)
-        }
+        if(!acceptUser)
+            res.status(500).json({ msg: "Failed to accept User" });
+        res.json({ msg: "User verified successfully" })
     }catch(error){
         console.error(error);
       res.status(500).send('Error al obtener la imagen de perfil del estudiante');

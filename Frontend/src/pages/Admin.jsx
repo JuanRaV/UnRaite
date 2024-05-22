@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import axiosClient from "../config/axiosClient"
 import UserInfo from '../components/UserInfo';
 import Header from '../components/HeaderAdmin';
+import Alert from '../components/Alert';
 
 const UserContainer = () => {
   const [drivers, setDrivers] = useState([]);
   const [passengers, setPassengers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [isDriver, setIsDriver] = useState(true);
-
+  const [alert,setAlert] = useState({})
   useEffect(() => {
     const fetchDrivers = async () => {
       try {

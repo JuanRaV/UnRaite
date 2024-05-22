@@ -36,7 +36,8 @@ const PassengerMain = () => {
         })
         setRaitesFilter(raitesFiltrados)
     }, [start, destination])
-
+    console.log( auth.raite[0]?.raiteId)
+    // console.log(raites)
     useEffect(() => {
         const getCurrentRaite = () => {
             const currentId = auth.raite[0]?.raiteId

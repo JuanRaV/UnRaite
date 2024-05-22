@@ -41,8 +41,10 @@ const RaitesDriverProvider = ({children}) =>{
                 }
 
                 const {data} = await axiosClient.get('/driver/get-raites',config)
-
-                setRaites(data)
+                if(data.length)
+                    setRaites(data)
+                else
+                    return
             } catch (error) {
                 console.log(error)
             }

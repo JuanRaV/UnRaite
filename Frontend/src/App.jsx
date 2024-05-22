@@ -65,11 +65,7 @@ const App = () => {
                 <Route path='/passenger' element={<ProtectedRoutePassenger />}>
                   <Route index element={<PassengerMain />} />
                   <Route path='raite/:id' element={<RaiteInfoPassenger />} />
-<<<<<<< HEAD
-                  <Route path="raite-history" element={<RideHistory />} />
-=======
                   
->>>>>>> 8ebd116bac22b9d6be4d819300729fafe8dd3eb3
                 </Route>
               </Routes>
             </RaitesPassengerProvider>
