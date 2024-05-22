@@ -201,10 +201,38 @@ const strike = async (req, res) => {
     }
 }
 
+const getRideHistory = async (req, res) => {
+    const passengerId = req.passenger.passengerId;
+
+    try {
+        const rideHistory = await prisma.passengerRaite.findMany({
+            where: { passengerId },
+            include: {
+                raite: {
+                    include: {
+                        driver: {
+                            select: {
+                                name: true,
+                                email: true,
+                                phoneNumber: true
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        res.status(200).json(rideHistory);
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to fetch ride history' });
+    }
+};
+
 export {
     getAllRaites,
     getOneRaite,
     acceptRaite,
     cancelRaite,
-    strike
+    strike,
+    getRideHistory
 }
