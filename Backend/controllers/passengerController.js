@@ -201,39 +201,71 @@ const strike = async (req, res) => {
     }
 }
 
-// const current = async (req, res) => {
-//     const {id} =req.params
-//     console.log(req.passenger.raite[0].raiteId)
-//     const num = parseInt(req.passenger.raite[0].raiteId)
-//     // try {
-//     //     const { passengerId } = req.passenger;
-//     //     // console.log("req pass", req.passenger)
-//     //     const inProgressRides = await prisma.passengerRaite.findMany({
-//     //         where: {
-//     //             passengerId: passengerId,
-//     //             raiteId:num,
-//     //             raite: {
-//     //                 completed: false
-//     //             }
-//     //         },
-//     //         include: {
-//     //             raite: true
-//     //         }
-//     //     });
-//     //     console.log(inProgressRides)
-//     //     if(!inProgressRides)
-//     //         return res.json({ msg: `No Raite Reserve yet` })
-//     //     res.status(200).json(inProgressRides);
-//     // } catch (error) {
-//     //     console.error('Error checking passenger rides in progress:', error);
-//     //     res.status(500).json({ message: 'Internal server error' });
-//     // }
-// };
+<<<<<<< HEAD
+const getRideHistory = async (req, res) => {
+    const passengerId = req.passenger.passengerId;
+
+    try {
+        const rideHistory = await prisma.passengerRaite.findMany({
+            where: { passengerId },
+            include: {
+                raite: {
+                    include: {
+                        driver: {
+                            select: {
+                                name: true,
+                                email: true,
+                                phoneNumber: true
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        res.status(200).json(rideHistory);
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to fetch ride history' });
+    }
+};
+
+=======
+const current = async (req, res) => {
+    const {id} =req.params
+    const num = parseInt(id)
+    try {
+        const { passengerId } = req.passenger;
+        // console.log("req pass", req.passenger)
+        const inProgressRides = await prisma.passengerRaite.findMany({
+            where: {
+                passengerId: passengerId,
+                raiteId:num,
+                raite: {
+                    completed: false
+                }
+            },
+            include: {
+                raite: true
+            }
+        });
+        console.log(inProgressRides)
+        if(!inProgressRides)
+        res.status(200).json(inProgressRides);
+    } catch (error) {
+        console.error('Error checking passenger rides in progress:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+>>>>>>> a89e2d4dcb3a140db62a2702cbaf052f31e94a19
 export {
     getAllRaites,
     getOneRaite,
     acceptRaite,
     cancelRaite,
     strike,
-    // current
+<<<<<<< HEAD
+    getRideHistory
+=======
+    current
+>>>>>>> a89e2d4dcb3a140db62a2702cbaf052f31e94a19
 }
