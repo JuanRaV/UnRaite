@@ -21,13 +21,18 @@ const Header = () => {
                     </Link>
                 </h2>
                 <div className="flex flex-col md:flex-row items-center gap-4">
-                    <button
-                        type="button"
-                        className="font-bold uppercase"
-
+                    {/* <Link
+                        to="/passenger/raite-history"
                     >
-                        Raites Story
-                    </button>
+                        <button
+                            type="button"
+                            className="font-bold uppercase"
+
+                        >
+                            Raites Story
+                        </button>
+                    </Link> */}
+
                     <button
                         type="button"
                         onClick={handleSignOff}

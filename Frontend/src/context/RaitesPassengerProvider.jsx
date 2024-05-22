@@ -13,7 +13,6 @@ const RaitesPassengerProvider = ({children}) =>{
     const [loading, setLoading] = useState(false)
     const [formRaiteModal, setFormRaiteModal] = useState(false)
     const [deleteTaskModal, setDeleteTaskModal] = useState(false)
-    const [rideHistory, setRideHistory] = useState([]);
 
     const navigate = useNavigate()
 
@@ -205,26 +204,6 @@ const RaitesPassengerProvider = ({children}) =>{
         }
     }
 
-    const fetchRideHistory = async () => { // Add this function
-        try {
-            const token = localStorage.getItem('token');
-            if (!token) return;
-
-            const config = {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`
-                }
-            };
-
-            const { data } = await axiosClient.get('/passenger/ride-history', config);
-            setRideHistory(data);
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-
     return(
         <RaitesContext.Provider
             value={{
@@ -236,9 +215,7 @@ const RaitesPassengerProvider = ({children}) =>{
                 setAlert,
                 cancelReservation,
                 reserveRaite,
-                reportDriver,
-                fetchRideHistory,
-                rideHistory
+                reportDriver
             }}
         >
             {children}

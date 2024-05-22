@@ -135,7 +135,7 @@ const SignUp = () => {
         }
       })
       setAlert({
-        msg:data.msg,
+        msg:"Account created successfully, wait until an admin verified you",
         error:false
       })
       setName('')

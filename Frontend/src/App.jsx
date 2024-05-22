@@ -21,6 +21,7 @@ import DriverNewPassword from './pages/DriverNewPassword'
 import PassengerForgotPassword from './pages/PassengerForgotPassword'
 import PassengerNewPassword from './pages/PassengerNewPassword'
 import RaiteInfoPassenger from './components/RaiteInfoPassenger'
+import RideHistory from './components/RideHistory'
 import UserInfo from './pages/Admin'
 
 import { DriverAuthProvider } from './context/DriverAuthProvider'
@@ -64,7 +65,7 @@ const App = () => {
                 <Route path='/passenger' element={<ProtectedRoutePassenger />}>
                   <Route index element={<PassengerMain />} />
                   <Route path='raite/:id' element={<RaiteInfoPassenger />} />
-                  <Route path="/ride-history" element={<RideHistory />} />
+                  <Route path="raite-history" element={<RideHistory />} />
                 </Route>
               </Routes>
             </RaitesPassengerProvider>

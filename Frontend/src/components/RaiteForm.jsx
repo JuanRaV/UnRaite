@@ -88,7 +88,7 @@ const RaiteForm = () => {
         e.preventDefault()
         const today = new Date(); // Get today's date
         const selectedDate = new Date(date)
-        
+
         if ([startHour, date, capacity, startingPoint, arrivalPoint].includes('')) {
             showAlert({
                 msg: 'All fields are required',
@@ -103,7 +103,7 @@ const RaiteForm = () => {
                 error: true
             })
             // alertDisapears()
-            
+
             return
         }
         else if (capacity <= 0) {
@@ -218,9 +218,17 @@ const RaiteForm = () => {
                         </div>
                     </>
                 )}
+                {start || destination ? (
+                    <div className="flex flex-row w-1/2 justify-between">
+                        <h2 className="text-gray-700 uppercase font-bold text-xl mt-5">From: <span className="text-indigo-500">{start}</span></h2>
+                        <h2 className="text-gray-700 uppercase font-bold text-xl mt-5">To: <span className="text-indigo-500">{destination}</span></h2>
+                    </div>
+                ) : (
+                    <input type="hidden" />
+                )}
                 <div>
                     <p className="text-gray-700 uppercase font-bold text-sm mt-5">Price</p>
-                    <p>{price}</p>
+                    <p className="text-indigo-500 uppercase  font-bold text-sm ">{price}</p>
                 </div>
             </div>
 

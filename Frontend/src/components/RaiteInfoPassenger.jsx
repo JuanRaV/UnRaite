@@ -59,7 +59,8 @@ const RaiteInfoPassenger = () => {
       <div className="mt-3 text-center flex justify-center ">
         <p className="text-xl font-bold mx-5 text-gray-600">Capacity: <span className="text-indigo-400">{raite.capacity}</span></p>
         <p className="text-xl font-bold text-gray-600">Status: {raite.completed ? <span className="text-green-500">Completed</span> : <span className="text-yellow-500">In Progress</span>}</p>
-        <p className="text-xl font-bold mx-5 text-gray-600">Price: <span className="text-green-400">${raite.price}</span></p>
+        <p className="text-xl font-bold mx-5 text-gray-600">Total Price: <span className="text-green-400">${raite.price}</span>  </p>
+        <p className=" text-gray-600 text-center text-xs">Divide this between total people travelling</p>
       </div>
       <p className="text-2xl font-bold mx-5 text-gray-600 text-center mt-3">Driver </p>
       <div className="bg-white shadow mt-3 rounded-lg ">

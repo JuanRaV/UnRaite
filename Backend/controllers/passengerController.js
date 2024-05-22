@@ -15,6 +15,35 @@ const getAllRaites = async (req, res) => {
         return res.status(404).json({ msg: "There are no Raites available" });
     res.json({ allRaites })
 }
+// const getStoryRaite = async (req, res) => {
+//     const allRaites = await prisma.raite.findMany({
+//         where: {
+//             capacity: {
+//                 not: 0
+//             },
+//             completed:true
+//         },
+//         include:{
+//             passengers:true
+//         }
+//     });
+//     if (!allRaites)
+//         return res.status(404).json({ msg: "There are no Raites available" });
+//     res.json({ allRaites })
+// }
+// const getStoryRaite = async (req,res) =>{
+//     const allRaites = await prisma.raite.findMany({
+//         where: {
+//             completed:true,
+//         },
+//         include:{
+//             passengers:true
+//         }
+//     });
+//     if (!allRaites)
+//         return res.status(404).json({ msg: "There are no Raites available" });
+//     res.json({ allRaites })
+// }
 
 const getOneRaite = async (req, res) => {
     const { id } = req.params
@@ -201,71 +230,41 @@ const strike = async (req, res) => {
     }
 }
 
-<<<<<<< HEAD
-const getRideHistory = async (req, res) => {
-    const passengerId = req.passenger.passengerId;
+// const getRideHistory = async (req, res) => {
+//     const passengerId = req.passenger.passengerId;
 
-    try {
-        const rideHistory = await prisma.passengerRaite.findMany({
-            where: { passengerId },
-            include: {
-                raite: {
-                    include: {
-                        driver: {
-                            select: {
-                                name: true,
-                                email: true,
-                                phoneNumber: true
-                            }
-                        }
-                    }
-                }
-            }
-        });
+//     try {
+//         const rideHistory = await prisma.passengerRaite.findMany({
+//             where: { passengerId },
+//             include: {
+//                 raite: {
+//                     include: {
+//                         driver: {
+//                             select: {
+//                                 name: true,
+//                                 email: true,
+//                                 phoneNumber: true
+//                             }
+//                         } 
+//                     }
+//                 }
+//             }
+//         });
 
-        res.status(200).json(rideHistory);
-    } catch (error) {
-        res.status(500).json({ message: 'Failed to fetch ride history' });
-    }
-};
+//         res.status(200).json(rideHistory);
+//     } catch (error) {
+//         res.status(500).json({ message: 'Failed to fetch ride history' });
+//     }
+// };
 
-=======
-const current = async (req, res) => {
-    const {id} =req.params
-    const num = parseInt(id)
-    try {
-        const { passengerId } = req.passenger;
-        // console.log("req pass", req.passenger)
-        const inProgressRides = await prisma.passengerRaite.findMany({
-            where: {
-                passengerId: passengerId,
-                raiteId:num,
-                raite: {
-                    completed: false
-                }
-            },
-            include: {
-                raite: true
-            }
-        });
-        console.log(inProgressRides)
-        if(!inProgressRides)
-        res.status(200).json(inProgressRides);
-    } catch (error) {
-        console.error('Error checking passenger rides in progress:', error);
-        res.status(500).json({ message: 'Internal server error' });
-    }
-};
->>>>>>> a89e2d4dcb3a140db62a2702cbaf052f31e94a19
 export {
     getAllRaites,
+    // getStoryRaite,
     getOneRaite,
     acceptRaite,
     cancelRaite,
     strike,
-<<<<<<< HEAD
-    getRideHistory
-=======
-    current
->>>>>>> a89e2d4dcb3a140db62a2702cbaf052f31e94a19
+   
+    // getStoryRaite
+    // getRideHistory 
 }

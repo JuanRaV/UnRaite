@@ -100,9 +100,9 @@ const SignUp = () => {
     ).then((response) => {
       console.log(response)
       setAlert({
-        msg: response.data.msg,
-        error: false
-      });
+        msg:"Account created successfully, wait until an admin verified you",
+        error:false
+      })
       alertDisapears()
     }).catch(er => {
       setAlert({
