@@ -27,18 +27,16 @@ const PassengerMain = () => {
     }, [])
 
     useEffect(()=>{
-        const raitesFiltrados = raites.map(raite=>{
-            // return raite.start == start && raite.destination==destination
-            if(raite.start == start && raite.destination==destination)
-                console.log("Hay match")
-            else
-                console.log("No hay match")
+        const raitesFiltrados =raites?.filter(raite=>{
+           return raite.start == start && raite.destination==destination
         })
         setRaitesFilter(raitesFiltrados)
+    },[start,destination])
 
-        console.log(`Found ${raitesFiltrados?.length} matching raites`);
-    },[])
-
+    const seeAll=()=>{
+        setStart("")
+        setDestination("")
+    }
     console.log(raitesFilter)
     // console.log("start", start)
     // console.log("destination", destination)
@@ -51,6 +49,17 @@ const PassengerMain = () => {
             <div className=" text-center">
                 <div className=" text-center">
                     <h2 className="font-bold text-xl uppercase text-center mb-5">Are you  going or leaving to GDL?</h2>
+                    <label className="mx-5 text-indigo-500 font-bold text-xl">
+                        <input
+                            type="radio"
+                            name="travelOption"
+                            className=""
+                            value="all"
+                            onChange={seeAll}
+                        />
+                        See all
+                    </label>
+
                     <label className="mx-5 text-indigo-500 font-bold text-xl">
                         <input
                             type="radio"
@@ -84,7 +93,7 @@ const PassengerMain = () => {
                                 <select onChange={(e) => {
                                     setDestination("Guadalajara")
                                     setStart(e.target.value);
-                                    console.log(start)
+                                    // console.log(start)
                                 }}
                                     className="mb-5 border p-1 rounded-lg">
                                     {towns.map(town => (
@@ -106,7 +115,7 @@ const PassengerMain = () => {
                                 <select
                                     onChange={(e) => {
 
-                                        console.log(e.target.value)
+                                        // console.log(e.target.value)
                                         setDestination(e.target.value);
                                         setStart("Guadalajara")
                                     }}
@@ -124,9 +133,13 @@ const PassengerMain = () => {
                 </div>
 
             </div>
+            <h2 className="text-gray-700 uppercase font-bold text-xl mt-5">Current Raite</h2>
             <div className="bg-white shadow mt-10 rounded-lg">
-                {raites?.length ?
-                    raites.map(raite => (
+                    
+            </div>
+            <div className="bg-white shadow mt-10 rounded-lg">
+                {raitesFilter?.length ?
+                    raitesFilter.map(raite => (
                         <RaitePreviewPassenger
                             key={raite.id}
                             raite={raite}
@@ -134,7 +147,18 @@ const PassengerMain = () => {
                             destination={destination}
                         />
                     ))
-                    : <p className="p-5 text-center text-gray-600 uppercase font-bold">No <span className="text-indigo-300">Raites</span> Available</p>
+                    :raitesFilter?.length == 0 && start!=""?(
+                        <p className="p-5 text-center text-gray-600 uppercase font-bold">No <span className="text-indigo-300">Raites</span> Available</p>
+                    )
+                    : raites?.length ?
+                    raites.map(raite => (
+                        <RaitePreviewPassenger
+                            key={raite.id}
+                            raite={raite}
+                            origin={origin}
+                            destination={destination}
+                        />
+                    )): <p className="p-5 text-center text-gray-600 uppercase font-bold">No <span className="text-indigo-300">Raites</span> Available</p>
                 }
             </div>
         </>
