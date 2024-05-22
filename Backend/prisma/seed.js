@@ -180,6 +180,7 @@ async function main() {
     }
   })
 
+
   const raite2 = await prisma.raite.upsert({
     where: { id: 2 },
     update: {},
@@ -229,6 +230,42 @@ async function main() {
       arrivalPoint: "Plaza",
       capacity: 1,
       price: 350,
+      driverId: driver2.driverId
+
+    }
+  })
+  const raite5 = await prisma.raite.upsert({
+    where: { id: 5 },
+    update: {},
+    create: {
+
+      startHour: "12:30",
+      start: "Arandas",
+      date: "21-08-2024",
+      startingPoint: "Bramido",
+      destination: "Guadalajara",
+      arrivalPoint: "Expiatorio",
+      capacity: 4,
+      price: 750,
+      completed:true,
+      driverId: driver1.driverId
+
+    }
+  })
+
+  const raite6 = await prisma.raite.upsert({
+    where: { id: 6 },
+    update: {},
+    create: {
+
+      startHour: "12:30",
+      start: "Guadalajara",
+      date: "01-06-2024",
+      startingPoint: "Mi casa",
+      destination: "Tepatitlán de Morelos",
+      arrivalPoint: "Glorieta del Huevo",
+      capacity: 2,
+      price: 750,
       driverId: driver2.driverId
 
     }

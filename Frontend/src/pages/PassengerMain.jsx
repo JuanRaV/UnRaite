@@ -41,14 +41,15 @@ const PassengerMain = () => {
     useEffect(() => {
         const getCurrentRaite = () => {
             const currentId = auth.raite[0]?.raiteId
-            const currentRaite = raites?.filter(raite => {
+            const currentRaite =  raites?.filter(raite => {
                 return raite.id == currentId
             })
             setCurrentRaite(currentRaite)
         }
         getCurrentRaite()
     }, [])
-    // console.log(currentRaite[0]?)
+    if(currentRaite?.length)
+        console.log(currentRaite[0])
 
 
     const seeAll = () => {
