@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axiosClient from "../config/axiosClient"
 import UserInfo from '../components/UserInfo';
+import Header from '../components/HeaderAdmin';
 
 const UserContainer = () => {
   const [drivers, setDrivers] = useState([]);
@@ -42,6 +43,8 @@ const UserContainer = () => {
   };
 
   return (
+    <>
+    <Header/>
     <div>
       <button
         className='bg-blue-500 p-2 rounded-lg text-white hover:bg-blue-700 mb-4'
@@ -53,21 +56,22 @@ const UserContainer = () => {
       <div>
         {isDriver ? (
           <div>
-            <h2>Drivers List</h2>
+            <h2 className='text-blue-500 text-2xl'>Drivers List</h2>
+
             {drivers.map(driver => (
-              <div key={driver.driverId} onClick={() => handleUserSelect(driver, { id: driver.driverId })}>
-                <p>Name: {driver.name}</p>
-                <p>Email: {driver.email}</p>
+              <div className='cursor-pointer bg-gray-200 p-4 rounded-lg  hover:bg-gray-300 m-5' key={driver.driverId} onClick={() => handleUserSelect(driver, { id: driver.driverId })}>
+                <p className="font-bold">Name: <span className="font-normal">{driver.name}</span></p>
+                <p className="font-bold">Email: <span className="font-normal">{driver.email}</span></p>
               </div>
             ))}
           </div>
         ) : (
           <div>
-            <h2>Passengers List</h2>
+            <h2 className='text-blue-500 text-2xl'>Passengers List</h2>
             {passengers.map(passenger => (
-              <div key={passenger.passengerId} onClick={() => handleUserSelect(passenger, { id: passenger.passengerId })}>
-                <p>Name: {passenger.name}</p>
-                <p>Email: {passenger.email}</p>
+              <div className='cursor-pointer bg-gray-200 p-4 rounded-lg  hover:bg-gray-300 m-5' key={passenger.passengerId} onClick={() => handleUserSelect(passenger, { id: passenger.passengerId })}>
+                <p className="font-bold">Name: <span className="font-normal">{passenger.name}</span></p>
+                <p className="font-bold">Email: <span className="font-normal"> {passenger.email}</span></p>
               </div>
             ))}
           </div>
@@ -82,6 +86,8 @@ const UserContainer = () => {
         />
       )}
     </div>
+    </>
+    
   );
 };
 
