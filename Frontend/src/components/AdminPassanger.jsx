@@ -25,8 +25,8 @@ const PassengerInfo = ({ passenger }) => {
   };
 
   return (
-    <div className="border-b p-5 flex flex-col flex-row justify-between">
-      <div className="flex items-center gap-2 space-x-5">
+    <div className="border-b p-5 flex flex-col justify-between">
+      <div className="flex items-center gap-2 space-x-5 bg-white p-4 rounded-lg shadow-md">
         <p className="font-bold">Name: <span className="font-normal">{name}</span></p>
         <p className="font-bold">Email: <span className="font-normal">{email}</span></p>
         <p className="font-bold">Phone Number: <span className="font-normal">{phoneNumber}</span></p>
@@ -41,9 +41,9 @@ const PassengerInfo = ({ passenger }) => {
           <img src={`http://localhost:3000/admin/get-image/${passengerId}/passenger/backStudentCredential`} alt="Back Student Credential" />
         </div>
       </div>
-      <div className="flex gap-2 mt-4">
-        <button className="bg-green-500 text-white p-2 rounded-lg hover:bg-green-700" onClick={handleAccept}>Accept</button>
-        <button className="bg-red-500 text-white p-2 rounded-lg hover:bg-red-700" onClick={handleDecline}>Decline</button>
+      <div className="flex justify-center mt-4">
+        <button className="bg-green-500 text-white py-2 px-5 rounded-lg hover:bg-green-700 mr-5" onClick={handleAccept}>Accept</button>
+        <button className="bg-red-500 text-white py-2 px-5 rounded-lg hover:bg-red-700" onClick={handleDecline}>Decline</button>
       </div>
     </div>
   );
